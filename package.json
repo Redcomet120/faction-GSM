@@ -1,0 +1,30 @@
+{
+  "name": "dongs",
+  "version": "0.0.1",
+  "description": "Distributed Online Network Gaming Servers is an online control panel for hosting private minecraft servers without having to keep the server running 24/7. the idea is that a user will login and launch the server when they want to play. Also users will beable to see who's online and join similar games or make plans to join similar games.",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.12.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Redcomet120/faction-GSM.git"
+  },
+  "keywords": [
+    "Gaming",
+    "Minecraft",
+    "control",
+    "panel",
+    "faction"
+  ],
+  "author": "Faction Productions",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Redcomet120/faction-GSM/issues"
+  },
+  "homepage": "https://github.com/Redcomet120/faction-GSM"
+}
