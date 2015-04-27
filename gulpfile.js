@@ -1,11 +1,14 @@
 var gulp = require('gulp');
-
 var jshint = require('gulp-jshint');
 var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var uglify = require('gulp-uglify');
+var browserify = require('browserify');
+var strictify = require('strictify');
+var reactify = require('reactify');
+var source = require('vinyl-source-stream');
 
-var jsFiles = ['js/*.js'];
+var jsFiles = ['./js/*.js'];
 
 gulp.task('lint', function() {
     return gulp.src(jsFiles)
@@ -20,16 +23,39 @@ gulp.task('html', function() {
 });
 
 gulp.task('scripts', function() {
-    return gulp.src(jsFiles)
-        .pipe(concat('js/index.js'))
-        .pipe(gulp.dest('static'))
-        .pipe(rename('js/index.min.js'))
-        .pipe(uglify())
+    return browserify('./js/init.js')
+        .transform([
+            reactify,
+            strictify
+        ])
+        .bundle()
+        .pipe(source('index.js'))
+        //.pipe(uglify())
+        .pipe(gulp.dest('./static/js'));
+});
+
+gulp.task('login', function() {
+    return browserify('./js/login.js')
+        .transform([
+            reactify,
+            strictify
+        ])
+        .bundle()
+        .pipe(source('login.js'))
+        //.pipe(uglify())
+        .pipe(gulp.dest('./static/js'));
+});
+
+gulp.task('htmllogin', function() {
+    return gulp.src('html/login.html')
+        .pipe(concat('login.html'))
         .pipe(gulp.dest('static'));
 });
 
+
 gulp.task('watch', function() {
-    gulp.watch(jsFiles, ['lint', 'scripts']);
+    gulp.watch(jsFiles, ['lint', 'scripts', 'login']);
+    gulp.watch('./html/*.html', ['html']);
 });
 
-gulp.task('default', ['lint', 'html', 'scripts', 'watch']);
+gulp.task('default', ['lint', 'html', 'htmllogin', 'scripts', 'login']);

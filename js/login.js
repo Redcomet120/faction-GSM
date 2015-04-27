@@ -5,18 +5,18 @@ var React = require('react');
 window.Backbone = Backbone;
 window.$ = $;
 
-var Init = React.createClass({
-    displayName: 'Init',
+var Login = React.createClass({
+    displayName: 'Login',
 
     render: function() {
         /* jshint ignore:start */
         return (
-            <div>Hello World</div>
+            <div>This will be the login page</div>
         );
         /* jshint ignore:end */
     }
 });
 
 /* jshint ignore:start */
-React.render(<Init />, document.getElementById('content'));
+React.render(<Login />, document.getElementById('content'));
 /* jshint ignore:end */
