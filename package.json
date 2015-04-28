@@ -29,6 +29,7 @@
     "zurb-foundation": "~4.2.3"
   },
   "devDependencies": {
+    "browserify": "^9.0.8",
     "gulp": "^3.8.11",
     "gulp-concat": "^2.5.2",
     "gulp-jshint": "^1.10.0",
@@ -36,7 +37,8 @@
     "gulp-uglify": "^1.2.0",
     "gulp-watch": "~4.2.0",
     "reactify": "~1.1.0",
-    "strictify": "~0.2.0"
+    "strictify": "~0.2.0",
+    "vinyl-source-stream": "^1.1.0"
   },
   "repository": {
     "type": "git",
