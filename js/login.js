@@ -2,6 +2,7 @@ var Backbone = require('backbone');
 var $ = require('jquery');
 var _ = require('lodash');
 var React = require('react');
+var auth = require('./core/auth.js');
 
 window.Backbone = Backbone;
 window.$ = $;
@@ -40,8 +41,4 @@ var Login = React.createClass({
     }
 });
 
-//styling login box
-var divStyle = {
-    color:'red'
-};
 React.render(<Login />, document.getElementById('content'));

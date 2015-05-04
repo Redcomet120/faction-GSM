@@ -15,45 +15,25 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var session = require('express-session');
+var flash = require('express-flash');
 
 // Set Static files directory
 app.use('/static/', express.static(__dirname + '/static/'));
 // Configure express
 app.use(logger('combined'));
-app.use(cookieParser());
+app.use(cookieParser('secret'));
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 app.use(methodOverride('X-HTTP-Method-Override'));
-app.use(session({ secret: 'baconTech', saveUninitialized: true, resave: true}));
+app.use(session({
+    secret: 'baconTech',
+    saveUninitialized: true,
+    resave: true,
+    cookie:{ maxAge: 60000}}));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Create a token cookie for user
-passport.serializeUser(function(user, done) {
-      done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
-        done(err, user);
-    });
-});
-
-// Configure passport strategy
-passport.use(new LocalStrategy(
-    function(usr, pword, done){
-        User.findOne({ username: usr }, function (err, user) {
-            if(err) { return done(err); }
-            if(!user) {
-                return done(null, false, { message: 'Incorrect username. '});
-            }
-            if(!user.validPassword(pword)) {
-                return done(null, false, { message: 'Wrong password. '});
-            }
-            return done(null, user);
-        });
-    }
-));
 
 // Redirects
 app.get('/', function(req, res) {
