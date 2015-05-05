@@ -11,14 +11,14 @@ var connection = mysql.createConnection({
 });
 
 //setup passport login session
-module.exports = function passportSession(passport)
+module.exports = function(passport)
 {
     passport.serializeUser(function(user, done){
-        done(null, user.id);
+        done(null, user.uid);
     });
 
-    passport.deserializeUser(function(id,done){
-        connection.query("SELECT * FROM 'users' WHERE 'uid' = "+id,function(err, rows){
+    passport.deserializeUser(function(uid,done){
+        connection.query("SELECT * FROM `users` WHERE `uid` = '" + uid + "'", function(err, rows){
             done(err, rows[0]);
         });
     });
@@ -62,27 +62,26 @@ module.exports = function passportSession(passport)
     }));
 
     //local Login
-    passport.use('local-login', new LocalStrategy({
-        usernameField   : 'username',
-        passwordField   : 'password',
-        passReqToCallback : true
+    passport.use('local-login',
+        new LocalStrategy({
+                usernameField   : 'username',
+                passwordField   : 'password',
+                passReqToCallback : true
+            },
+            function(req, username, password, done){
+                connection.query("SELECT * FROM `users` WHERE `username` = '" + username + "'", function(err, rows){
+                    if(err)
+                        return done(err);
+                    //check for credentials
+                    if(rows.length && rows[0].password == password){
+                        //return successful user
+                        return done(err, rows[0], req);
+                    }
+                    req.flash('loginMessage', 'Cannot find your username or password.');
+                    return done(err, false, req);
 
-    },
-    function(req, username, password, done){
-        connection.query("SELECT * FROM 'users' WHERE 'username' = '" + username + "'",function(err,rows){
-            if(err)
-                return done(err);
-        //check for username
-            if(!rows.length){
-                return done(null, false, req.flash('loginMessage','Username not Found'));
+                });
             }
-            //check password
-            //we probably need to mod this with our hashing alg
-            if(!(rows[0].password == password)){
-                return done(null, false, req.flash('loginMessage','Wrong password'));
-            }
-            //return successful user
-            return done(null, rows[0]);
-        });
-    }));
+        )
+    );
 };

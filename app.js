@@ -7,7 +7,6 @@ global.root_require = function(name) {
 // Required modules
 var express = require('express');
 var app = express();
-var config = require('./config');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var logger = require('morgan');
@@ -16,9 +15,11 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var session = require('express-session');
 var flash = require('express-flash');
+var config = require('./config');
 
 // Set Static files directory
 app.use('/static/', express.static(__dirname + '/static/'));
+
 // Configure express
 app.use(logger('combined'));
 app.use(cookieParser('secret'));
@@ -34,6 +35,7 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
+require('./core/auth')(passport);
 
 // Redirects
 app.get('/', function(req, res) {
@@ -42,10 +44,9 @@ app.get('/', function(req, res) {
 
 // Login local auth redirect
 app.post('/login',
-    passport.authenticate('local', {
+    passport.authenticate('local-login', {
         successRedirect: '/dongs',
-        failureRedirect: '/login',
-        failureFlash: true
+        failureRedirect: '/login'
     })
 );
 
@@ -56,6 +57,10 @@ app.get('/login', function(req, res) {
         .sendFile(html);
 });
 
+app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/login');
+});
 
 app.get('/dongs', function(req, res) {
     var html = __dirname + '/static/index.html';
