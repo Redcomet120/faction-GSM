@@ -8,15 +8,18 @@ window.$ = $;
 var Init = React.createClass({
     displayName: 'Init',
 
+    logout: function() {
+        Backbone.history.navigate('/logout', {trigger: true, replace: true});
+    },
+
     render: function() {
-        /* jshint ignore:start */
         return (
-            <div>Hello World</div>
+            <div>
+                <div>Hello World</div>
+                <button onclick={this.logout}>Log Out</button>
+            </div>
         );
-        /* jshint ignore:end */
     }
 });
 
-/* jshint ignore:start */
 React.render(<Init />, document.getElementById('content'));
-/* jshint ignore:end */
