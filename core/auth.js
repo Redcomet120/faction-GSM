@@ -36,9 +36,9 @@ module.exports = function(passport)
         connection.query("SELECT * FROM 'users' WHERE 'username' = '"+ username +"'", function(err,rows){
             console.log(rows);
             if(err)
-                return done(err);
+               return done(err);
             if(rows.length){
-                return done(null, false, req.flash('signupMessage' , 'that user already exists.'));
+                return done(null, false);
             }
             //check if serverkey matches
             if(serverkey == "bacon"){
@@ -53,9 +53,6 @@ module.exports = function(passport)
                     newUserMysql.uid = rows.insertedId;
                     return done(null, newUserMysql);
                 });
-            }
-            else{
-                req.flash('signupMessage' , 'Your server Key is invalid');
             }
         });
 
@@ -77,7 +74,6 @@ module.exports = function(passport)
                         //return successful user
                         return done(err, rows[0], req);
                     }
-                    req.flash('loginMessage', 'Cannot find your username or password.');
                     return done(err, false, req);
 
                 });

@@ -14,7 +14,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var session = require('express-session');
-var flash = require('express-flash');
 var config = require('./config');
 
 // Set Static files directory
@@ -31,7 +30,6 @@ app.use(session({
     saveUninitialized: true,
     resave: true,
     cookie:{ maxAge: 60000}}));
-app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
