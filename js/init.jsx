@@ -1,6 +1,8 @@
 var Backbone = require('backbone');
 var $ = require('jquery');
 var React = require('react');
+var TopBar = require('./views/topbar');
+var Footer = require('./views/footer');
 
 window.Backbone = Backbone;
 window.$ = $;
@@ -8,15 +10,11 @@ window.$ = $;
 var Init = React.createClass({
     displayName: 'Init',
 
-    logout: function() {
-        Backbone.history.navigate('/logout', {trigger: true, replace: true});
-    },
-
     render: function() {
         return (
             <div>
-                <div>Hello World</div>
-                <button onclick={this.logout}>Log Out</button>
+                <TopBar />
+                <Footer />
             </div>
         );
     }
