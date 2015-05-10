@@ -41,12 +41,28 @@ app.get('/', function(req, res) {
 });
 
 // Login local auth redirect
-app.post('/login',
-    passport.authenticate('local-login', {
-        successRedirect: '/dongs',
-        failureRedirect: '/login'
-    })
-);
+app.post('/login',function(req, res, next) {
+    console.log(req.body.username);
+    console.log(req.body.password);
+    console.log("making a post to login");
+      passport.authenticate('local-login', function(err, user, info) {
+          console.log("auth was good");
+              if (err) { return next(err) }
+                console.log("we didn't error");
+                  if (!user) {
+                            console.log("wrong credentials");
+                              return res.redirect('/login')
+                    }
+                    console.log("we are good for dongs");
+                      req.logIn(user, function(err) {
+                                console.log("we should be logged in at tihs point");
+                                if (err) { return next(err); }
+                                        console.log( "redirecting to dongs now");
+                                      return res.redirect('/dongs');
+                                      console.log("fuck redirect failed");
+                                          });
+                        })(req, res, next);
+});
 
 app.get('/login', function(req, res) {
     var html = __dirname + '/static/login.html';
