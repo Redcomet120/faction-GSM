@@ -34,7 +34,6 @@ module.exports = function(passport)
     function(req, username, password, serverkey,done){
     // check to make sure they are not already a user
         connection.query("SELECT * FROM 'users' WHERE 'username' = '"+ username +"'", function(err,rows){
-            console.log(rows);
             if(err)
                return done(err);
             if(rows.length){
@@ -48,7 +47,6 @@ module.exports = function(passport)
                 //I think this is plaintext for now need to hash
                 newUserMysql.password = password;
                 var insertQuery = "INSERT INTO 'users' ( username, password ) values ('" + username +"','"+ password + "')";
-                console.log(insertQuery);
                 connection.query(insertQuery,function(err,rows){
                     newUserMysql.uid = rows.insertedId;
                     return done(null, newUserMysql);
