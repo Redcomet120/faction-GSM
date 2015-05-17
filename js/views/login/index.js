@@ -1,14 +1,17 @@
 var Backbone = require('backbone');
 var $ = require('jquery');
 var React = require('react');
-var LoginModel = require('../models/login');
-
-window.Backbone = Backbone;
-window.$ = $;
-window.Backbone.$ = $;
+var LoginModel = require('../../models/login');
+new LoginModel();
 
 var Login = React.createClass({
     displayName: 'Login',
+
+    componentDidMount: function(){
+        window.Backbone = Backbone;
+        window.$ = $;
+        window.Backbone.$ = $;
+    },
 
     getInitialState: function() {
         return {
@@ -48,21 +51,21 @@ var Login = React.createClass({
         conf.css('background', 'red');
     },
 
-    getSignup: function() {
+    getContent: function() {
+        if(this.state.signup)
+            return (
+                <form>
+                    <label className="confirm-password">
+                        <span>Confirm Password:</span>
+                        <input type="password" />
+                    </label>
+                    <button onClick={this.signup}>Signup</button>
+                    <button onClick={this.register}>Go back to Login</button>
+                </form>
+            );
+
         return (
-            <form style={{display: this.state.signup ? 'block' : 'none'}}>
-                <label className="confirm-password">
-                    <span>Confirm Password:</span>
-                    <input type="password" />
-                </label>
-                <button onClick={this.signup}>Signup</button>
-                <button onClick={this.register}>Go back to Login</button>
-            </form>
-        );
-    },
-    getLogin: function() {
-        return (
-            <form style={{display: this.state.signup ? 'none' : 'block'}}>
+            <form>
                 <button onClick={this.login}>Login</button>
                 <button onClick={this.register}>Register</button>
             </form>
@@ -72,6 +75,7 @@ var Login = React.createClass({
         return (
             <div className="row">
                 <div className="small-12 columns">
+                    <h1>Welcome to Dongs!</h1>
                     <label className="username">
                         <span>Username:</span>
                         <input type="text" />
@@ -80,14 +84,11 @@ var Login = React.createClass({
                         <span>Password:</span>
                         <input type="password" />
                     </label>
-                    {this.getLogin()}
-                    {this.getSignup()}
+                    {this.getContent()}
                 </div>
             </div>
         );
     }
 });
-
-new LoginModel();
 
 React.render(<Login />, document.getElementById('content'));

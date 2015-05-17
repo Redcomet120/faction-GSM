@@ -1,18 +1,13 @@
 //==================== Auth module=========
 var LocalStrategy = require('passport-local').Strategy;
 var mysql = require('mysql');
+var config = rootRequire('./config.js');
 
 //mysql connection ....we may want to move this somewhere else later
-var connection = mysql.createConnection({
-    host     : 'localhost',
-    database : 'dongs',
-    user     : 'dongs',
-    password : 'D0ng$'
-});
+var connection = mysql.createConnection(config.mysql);
 
 //setup passport login session
-module.exports = function(passport)
-{
+module.exports = function(passport) {
     passport.serializeUser(function(user, done){
         done(null, user.uid);
     });

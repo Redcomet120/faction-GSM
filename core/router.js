@@ -4,18 +4,19 @@ var Backbone = require('backbone');
 
 var Router = Backbone.Router.extend({
     routes: {
-        '/': 'login',
-        '/login': 'login',
-        '/dongs': 'dongs'
+        '/dongs': 'dongs',
+        '*': 'login'
     }
 });
 
-Router.on('login', function() {
+Router.on('route:login', function() {
 
 });
 
-Router.on('dongs', function() {
+Router.on('route:dongs', function() {
 
 });
+
+Backbone.history.start();
 
 module.exports = Router;
