@@ -1,17 +1,21 @@
 var Backbone = require('backbone');
 var React = require('react');
+var styles = require('./styles');
 
 var TopBar = React.createClass({
     displayName: 'Top Bar',
 
     logout: function() {
-        Backbone.history.navigate('/logout', {trigger: true, replace: true});
+        window.location = '/logout';
     },
 
     render: function() {
         return (
-            <div className="row">
-                <button onclick={this.logout}>Log Out</button>
+            <div className="row" style={ styles.container }>
+                <button
+                    className="button small radius"
+                    onClick={ this.logout }
+                    style={ styles.button }>Log Out</button>
             </div>
         );
     }

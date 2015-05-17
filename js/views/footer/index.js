@@ -1,12 +1,13 @@
 var React = require('react');
+var styles = require('./styles');
 
 var Footer = React.createClass({
     displayName: 'Footer',
 
     render: function() {
         return (
-            <div className="row">
-                Here is some information!
+            <div className="row" style={ styles.container }>
+                Faction Productions
             </div>
         );
     }

@@ -10,7 +10,16 @@ var reactify = require('reactify');
 var source = require('vinyl-source-stream');
 var scss = require('gulp-sass');
 
-var jsFiles = ['./js/*.js', './js/views/*.js', './js/models/*.js', './js/login/*.js'];
+var jsFiles = [
+    './js/*.js',
+    './js/init/*.jsx',
+    './js/models/*.js',
+    './js/views/*.js',
+    './js/views/dongs/*.js',
+    './js/views/footer/*.js',
+    './js/views/login/*.js',
+    './js/views/topbar/*.js'
+];
 
 gulp.task('lint', function() {
     return gulp.src(jsFiles)
@@ -20,13 +29,8 @@ gulp.task('lint', function() {
         .pipe(jshint.reporter('default'));
 });
 
-gulp.task('html', function() {
-    return gulp.src('html/*.html')
-        .pipe(gulp.dest('static'));
-});
-
 gulp.task('scripts', function() {
-    browserify('./js/login/index.jsx')
+    browserify('./js/views/login/index.js')
         .transform([
             reactify,
             strictify
@@ -36,7 +40,7 @@ gulp.task('scripts', function() {
         //.pipe(uglify())
         .pipe(gulp.dest('./static/js'));
 
-    return browserify('./js/init.jsx')
+    return browserify('./js/views/dongs/index.js')
         .transform([
             reactify,
             strictify
@@ -55,7 +59,6 @@ gulp.task('css', function() {
 
 gulp.task('watch', function() {
     gulp.watch(jsFiles, ['lint', 'scripts']);
-    gulp.watch('./html/*.html', ['html']);
 });
 
-gulp.task('default', ['lint', 'html', 'scripts', 'css']);
+gulp.task('default', ['lint', 'scripts', 'css', 'watch']);
