@@ -2,6 +2,8 @@
 
 var Backbone = require('backbone');
 
+var ServerDBController = require('./core/mysql-Driver');
+
 // Redirects
 module.exports = function(app, passport) {
     app.get('/', function(req, res) {
@@ -37,4 +39,6 @@ module.exports = function(app, passport) {
         if(!req.user) return res.redirect('/login');
         res.render('init/dongs');
     });
+
+    app.get('/api/servers', ServerDBController.getAll);
 };

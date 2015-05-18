@@ -6,8 +6,12 @@ var Footer = React.createClass({
 
     render: function() {
         return (
-            <div className="row" style={ styles.container }>
-                Faction Productions
+            <div style={ styles.footer }>
+                <div className="row">
+                    <div className="small-12 column">
+                        Faction Productions
+                    </div>
+                </div>
             </div>
         );
     }
