@@ -1,5 +1,3 @@
-var Backbone = require('backbone');
-var $ = require('jquery');
 var React = require('react');
 
 var InitLogin = React.createClass({
@@ -7,13 +5,13 @@ var InitLogin = React.createClass({
 
     render: function() {
         return (
-            <html>
+            <html style={{ height: "100%" }}>
                 <head>
                     <title>DONGS Login</title>
                     <link rel="stylesheet" type="text/css" href="/static/css/app.css" />
                 </head>
-                <body>
-                    <div id="content" />
+                <body style={{ height: "100%" }}>
+                    <div id="content" style={{ height: "100%" }} />
                     <script src="/static/js/login.js" />
                 </body>
             </html>

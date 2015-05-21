@@ -17,7 +17,9 @@ var jsFiles = [
     './js/views/*.js',
     './js/views/dongs/*.js',
     './js/views/footer/*.js',
+    './js/views/init/*.js',
     './js/views/login/*.js',
+    './js/views/server-list/*.js',
     './js/views/topbar/*.js'
 ];
 
