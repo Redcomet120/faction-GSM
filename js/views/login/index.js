@@ -1,8 +1,12 @@
 var Backbone = require('backbone');
 var $ = require('jquery');
 var React = require('react');
+
+// Models
 var LoginModel = require('../../models/login');
+var RegisterModel = require('../../models/register');
 new LoginModel();
+new RegisterModel();
 
 var Login = React.createClass({
     displayName: 'Login',
@@ -47,7 +51,7 @@ var Login = React.createClass({
             confirmPW: conf.val()
         };
 
-        if(credentials.password === credentials.confirmPW) return Backbone.trigger('signup', credentials);
+        if(credentials.password === credentials.confirmPW) return Backbone.trigger('register', credentials);
         conf.css('background', 'red');
     },
 
@@ -59,7 +63,7 @@ var Login = React.createClass({
                         <span>Confirm Password:</span>
                         <input type="password" />
                     </label>
-                    <button onClick={this.signup}>Signup</button>
+                    <button onClick={this.signup}>Register</button>
                     <button onClick={this.register}>Go back to Login</button>
                 </form>
             );

@@ -1,8 +1,8 @@
 var Backbone = require('backbone');
 
-var LoginModel = Backbone.Model.extend({
+var RegisterModel = Backbone.Model.extend({
     initialize: function() {
-        Backbone.on('login', function(credentials) {
+        Backbone.on('register', function(credentials) {
             this.save(credentials, {
                 complete: function(resp) {
                     if(resp.status === 200 && resp.responseJSON.status === 'success') {
@@ -13,8 +13,8 @@ var LoginModel = Backbone.Model.extend({
         }.bind(this));
     },
     url: function() {
-        return 'api/login';
+        return 'api/register';
     }
 });
 
-module.exports = LoginModel;
+module.exports = RegisterModel;
