@@ -6,4 +6,6 @@ Distrubted Online Network Game Servers is a node JS application designed to mana
 The application is aimed primarily at minecraft, Terraria, and games of that nature. Users of this software can 
 install it on an older desktop or laptop computer and load their gameservers into the system. Thier are roles and 
 permissions that will limit what individual users and players can do to their servers. Regular players will be 
-able to login and start and stopservers they would like to play. 
+able to login and start and stop servers they would like to play. 
+
+<h2>Features</h2>
