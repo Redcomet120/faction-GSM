@@ -1,48 +1,29 @@
-var MCadmin = require("minecraft-server-admin");
+var exec = require('child_process').spawn;
 var dbDrver = require('../core/mysql-Driver');
-var MCServer= {
-    sid     : null,
-    path    : null,
-    name    : null,
-    mods    : null,
-    client  : null,
-    descr   : null,
-    mcVer   : null,
-};
 
+    module.exports = {
+    //loads up a server and takes control of it based
+    //on the directory passed in
+    load:function(dir){
 
-module.exports ={
-    function startServer(serverName){
-         //find the server in database
-        if(!this.findServer(serverName))
-        {
-            console.log("shit we can't find this server");
-            //should report an error here
-        }
-        else{
-            //initiate the node-minecraft-server- instance for our server
-            MCadmin.Server(MCServer.path);
-            //check if it's already running
-            //check if resources available
-            //launch
-            MCadmin.Server#start(function(){
-                console.log("Ithink it's starting");
-            });
-        //check for running
-        //return running
     },
-    function stopServer(serverName){
-        //check for active players
-        if( MCadmin.Server#status != "stopped")
-        {
-            MCadmin.Server#stop(function(){
-                console.log("Ithink it stopped");
-        //check for running
-        //send shutdown
-        //return stopped
+    startServer:function()
+    {
+        var serverJar = "forge-1.7.10-10.13.2.1291-universal.jar";
+        var serverRoot = "survival1.7.10/";
+         exec('java -jar '+serverJar,
+                 {cwd: '~/dongs/gameServers/'+serverRoot},
+                function(error, stdout, stderr){
+                    console.log('stdout: '+ stdout);
+                    console.log('stderr: '+ stderr);
+                    if(error !== null){
+                        console.log('exec error: '+ error);
+                    }
+        });
+
     },
     //finds server info in database and loads it to our MCServer object
-    function findServer(serverName){
+    findServer:function(serverName){
         //query the db
         var result = dbDriver.serverByName(serverName,
                 function(err, res){
@@ -67,10 +48,9 @@ module.exports ={
         }else{
             return false
         }
-    },
-
+    }
 };
 
 var MCCont = require('../core/minecraftController');
 
-var myserver = MCCont.gwtPlayers('RailRoad');
+//var myserver = MCCont.gwtPlayers('RailRoad');
