@@ -1,5 +1,6 @@
-var exec = require('child_process').spawn;
+var exec = require('child_process');
 var dbDrver = require('../core/mysql-Driver');
+var server = null;
 
     module.exports = {
     //loads up a server and takes control of it based
@@ -8,6 +9,13 @@ var dbDrver = require('../core/mysql-Driver');
 
     },
     startServer:function()
+    {
+        server = exec.spawn(
+                "java",
+                ['-Xms512M', '-Xmx512M', '-jar', 'forge-1.7.10-10.13.2.1291-universal.jar', 'nogui'],
+                { cwd: "~/dongs/gameServer/survival1.7.10"});
+    },
+    startBacon:function()
     {
         var serverJar = "forge-1.7.10-10.13.2.1291-universal.jar";
         var serverRoot = "survival1.7.10/";
