@@ -15,8 +15,6 @@ var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var session = require('express-session');
 var config = require('./config');
-var ServerDBController = require('./core/mysql-Driver');
-var MCController = require('./core/minecraftController');
 
 try {
     var dev = require('./dev-config');
@@ -42,9 +40,6 @@ app.use(passport.session());
 
 require('./core/auth')(passport);
 require('./routes')(app, passport);
-
-app.get('/api/servers', ServerDBController.getAll);
-app.get('/api/start', MCController.startServer);
 
 var server = app.listen(dev.port, function() {
     var host = server.address().address;
