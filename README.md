@@ -8,4 +8,8 @@ install it on an older desktop or laptop computer and load their gameservers int
 permissions that will limit what individual users and players can do to their servers. Regular players will be 
 able to login and start and stop servers they would like to play. 
 
+<h3> Branches</h3>
+<p>master - main branch where all functions are pulled in.</p>
+<p>logins - login branch contains the working code for login and suthentication functionality</p>
+<p>minecraftLAuncher - this branch contains the working directory for functions that start and stop.</p>
 <h2>Features</h2>
