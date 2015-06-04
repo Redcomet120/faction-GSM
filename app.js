@@ -41,7 +41,6 @@ app.use(passport.session());
 require('./core/auth')(passport);
 require('./routes')(app, passport);
 
-// Starts the server listening
 var server = app.listen(dev.port, function() {
     var host = server.address().address;
     var port = server.address().port;

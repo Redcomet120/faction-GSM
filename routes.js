@@ -3,6 +3,7 @@
 var Backbone = require('backbone');
 
 var ServerDBController = require('./core/mysql-Driver');
+var MCController = require('./core/minecraftController');
 
 // Redirects
 module.exports = function(app, passport) {
@@ -68,4 +69,6 @@ module.exports = function(app, passport) {
     });
 
     app.get('/api/servers', ServerDBController.getAll);
+    app.get('/api/start', MCController.startServer);
+    app.get('/api/stop',MCController.stopServer);
 };
