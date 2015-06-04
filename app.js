@@ -1,5 +1,3 @@
-'use strict';
-
 global.rootRequire = function(name) {
     return require(__dirname + '/' + name);
 };
@@ -39,7 +37,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./core/auth')(passport);
-require('./routes')(app, passport);
+require('./core/routes')(app, passport);
 
 var server = app.listen(dev.port, function() {
     var host = server.address().address;
