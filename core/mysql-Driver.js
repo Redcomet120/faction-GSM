@@ -24,10 +24,6 @@ ServerDBController = {
             return res.status(200).send(result);
         });
      }
-
-
-
-
 };
 
 module.exports = ServerDBController;
