@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var jsx = require('jshint-jsx');
@@ -9,6 +10,10 @@ var strictify = require('strictify');
 var reactify = require('reactify');
 var source = require('vinyl-source-stream');
 var scss = require('gulp-sass');
+var packageJSON  = require('./package');
+var jshintConfig = packageJSON.jshintConfig;
+
+jshintConfig.lookup = false;
 
 var jsFiles = [
     './js/*.js',
@@ -22,12 +27,19 @@ var jsFiles = [
     './js/views/server-list/*.js',
     './js/views/topbar/*.js'
 ];
+var coreFiles = [
+    './core/*.js',
+    './*.js'
+];
 
 gulp.task('lint', function() {
-    return gulp.src(jsFiles)
-        .pipe(jshint({
-            linter: jsx.JSXHINT
-        }))
+    gulp.src(jsFiles)
+        .pipe(jshint(
+            _.extend({}, jshintConfig, { linter: jsx.JSXHINT })
+        ))
+        .pipe(jshint.reporter('default'));
+    return gulp.src(coreFiles)
+        .pipe(jshint(jshintConfig))
         .pipe(jshint.reporter('default'));
 });
 
@@ -60,7 +72,7 @@ gulp.task('css', function() {
 });
 
 gulp.task('watch', function() {
-    gulp.watch(jsFiles, ['lint', 'scripts']);
+    gulp.watch(jsFiles.concat(coreFiles), ['lint', 'scripts']);
 });
 
-gulp.task('default', ['lint', 'scripts', 'css', 'watch']);
+gulp.task('default', ['lint', 'scripts', 'css']);

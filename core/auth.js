@@ -15,8 +15,8 @@ module.exports = function(passport) {
 
     passport.deserializeUser(function(uid, done) {
         connection.query(queries.selectFrom('users', 'uid', uid),
-            function(err) {
-                done(err);
+            function(err, user) {
+                done(err, user);
             }
         );
     });
@@ -35,10 +35,11 @@ module.exports = function(passport) {
                     if(err) return done(err);
                     if(rows.length) return done(null, false);
                     // Create user
-                    var newUserMysql = new Object();
-                    newUserMysql.username = username;
                     //TODO: Encrypt password
-                    newUserMysql.password = password;
+                    var newUserMysql = {
+                        username: username,
+                        password: password
+                    };
                     connection.query(queries.insertInto('users', ['username', 'password'], [username, password]), function(err, rows) {
                         newUserMysql.uid = rows.insertId;
                         return done(null, newUserMysql);

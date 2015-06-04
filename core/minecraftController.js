@@ -17,36 +17,33 @@ var serverData = {
 module.exports = {
     //loads up a server and takes control of it based
     //on the directory passed in
-    load:function()
-    {
+    load: function() {
 
     },
-    startServer:function()
-    {
+    startServer: function() {
         console.log(process.cwd());
         serverProc = exec.spawn(
                 "java",
                 ['-Xms512M', '-Xmx512M', '-jar', serverData.serverJar, 'nogui'],
                 { cwd: process.cwd()+"/gameServers/"+serverData.serverDir});
     },
-    stopServer: function()
-    {
+    stopServer: function() {
         serverProc.stdin.write('stop \n');
     },
     //finds server info in database
-    findServer:function(serverName){
+    findServer: function(serverName) {
         //query the db
         serverData = dbDriver.serverByName(serverName,
-                function(err, res){
-                    if(err){
-                        console.log(err);
-                    }
-                    if(!res){
-                        return false;
-                    }else{
-                        return res;
-                    }
-                });
-
+            function(err, res){
+                if(err){
+                    console.log(err);
+                }
+                if(!res){
+                    return false;
+                } else {
+                    return res;
+                }
+            }
+        );
     }
 };
