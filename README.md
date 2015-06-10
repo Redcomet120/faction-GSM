@@ -12,4 +12,13 @@ able to login and start and stop servers they would like to play.
 <p>master - main branch where all functions are pulled in.</p>
 <p>logins - login branch contains the working code for login and suthentication functionality</p>
 <p>minecraftLAuncher - this branch contains the working directory for functions that start and stop.</p>
-<h2>Features</h2>
+
+<h2>Modules used</h2>
+<ul>
+<li>Express</li>
+<li>Backbone</li>
+<li>browserify</li>
+<li>Passport</li>
+<li>MySQL</li>
+<li>React/li>
+</ul>
