@@ -1,5 +1,6 @@
 var exec = require('child_process');
 var dbDriver = require('../core/mysql-Driver');
+var Q = require('q');
 var serverProc = null;
 var serverData = {
     backupDir: null,
@@ -19,13 +20,15 @@ module.exports = {
     //loads up a server and takes control of it based
     //on the directory passed in
     players: function() {
+       // serverProc.stdin.end();
+     // serverProc.stdout.on('data', function(data){
         serverProc.stdin.write('list \n');
-        serverProc.stdin.end();
-/*        serverProc.stdout.on('data', function(data){
-            console.log(data);
+        serverProc.stdout.pipe(process.stdout);
+//          console.log(data);
+//
             //mcout += data;
-        });
-        serverProc.stdout.on('end', function() {
+//        });
+/*        serverProc.stdout.on('end', function() {
             console.log(mcout);
         });
 */
