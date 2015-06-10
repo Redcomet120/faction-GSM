@@ -1,9 +1,90 @@
+var Backbone = require('backbone');
 var $ = require('jquery');
 var React = require('react');
 var _ = require('lodash');
+var styles = {
+    button: {
+        cursor: "pointer"
+    }
+};
+
+var Server = React.createClass({
+    displayName: 'Server',
+
+    getDefaultProps: function() {
+        return {
+            server: {}
+        };
+    },
+    getInitialState: function() {
+        return {
+            status: 'stopped',
+            players: []
+        };
+    },
+
+    componentDidMount: function(){
+        Backbone.on('serverStarted', function(results) {
+            this.setState({
+                status: "started"
+            });
+            Backbone.trigger('getPlayers', this.props.server.sid);
+        }, this);
+        Backbone.on('serverStopped', function(results) {
+            this.setState({
+                status: "stopped",
+                players: []
+            });
+        }, this);
+        Backbone.on('hasPlayers', function(players) {
+            this.setState({
+                players: players
+            });
+        }, this);
+        Backbone.trigger('getPlayers', this.props.server.sid);
+    },
+
+    startServer: function() {
+        Backbone.trigger('startServer', this.props.server.sid);
+    },
+    stopServer: function() {
+        Backbone.trigger('stopServer', this.props.server.sid);
+    },
+    getPlayers: function() {
+        Backbone.trigger('getPlayers', this.props.server.sid);
+    },
+
+    render: function() {
+        return(
+            <div className='row'>
+                <div className='small-12 column'>
+                    <div className='row'>
+                        <h3 className='small-4 column'>{ this.props.server.name }</h3>
+                        <div className='small-4 column'>IP</div>
+                        <div className='small-2 column'>Status: { this.state.status }</div>
+                        <div className='small-2 column' onClick={ this.getPlayers } style={ styles.button }>Players: { this.state.players.length }</div>
+                    </div>
+                    <div className='row'>
+                        <div className='small-6 column'>{ this.props.server.descr }</div>
+                        <div className='small-6 column'>
+                            <div className='row'>
+                                <div className='small-6 column' onClick={ this.startServer } style={ styles.button }>Start</div>
+                                <div className='small-6 column' onClick={ this.stopServer } style={ styles.button }>Stop</div>
+                            </div>
+                            <div className='row'>
+                                <div className='small-6 column'>{ this.props.server.game }:</div>
+                                <div className='small-6 column'>{ this.props.server.gameVer }</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+});
 
 var ServerList = React.createClass({
-    displayName: 'Init',
+    displayName: 'Server List',
 
     getDefaultProps: function() {
         return {
@@ -13,31 +94,7 @@ var ServerList = React.createClass({
 
     formatServerList: function() {
         return _.map(this.props.servers, function(server) {
-            return(
-                <div className='row'>
-                    <div className='small-12 column'>
-                        <div className='row'>
-                            <h3 className='small-4 column'>{ server.name }</h3>
-                            <div className='small-4 column'>IP</div>
-                            <div className='small-3 column'>Status</div>
-                            <div className='small-1 column'># Players</div>
-                        </div>
-                        <div className='row'>
-                            <div className='small-6 column'>{ server.descr }</div>
-                            <div className='small-6 column'>
-                                <div className='row'>
-                                    <div className='small-6 column'>Start</div>
-                                    <div className='small-6 column'>Stop</div>
-                                </div>
-                                <div className='row'>
-                                    <div className='small-6 column'>{ server.game }:</div>
-                                    <div className='small-6 column'>{ server.gameVer }</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
+            return <Server server={ server } key={ server.id }/>
         });
     },
 
