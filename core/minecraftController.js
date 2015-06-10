@@ -13,22 +13,56 @@ var serverData = {
     properties: "server.properties",
     worldDir: "world"
 };
+var mcout = ' ';
 
 module.exports = {
     //loads up a server and takes control of it based
     //on the directory passed in
-    load: function() {
-
+    players: function() {
+        serverProc.stdin.write('list \n');
+        serverProc.stdin.end();
+/*        serverProc.stdout.on('data', function(data){
+            console.log(data);
+            //mcout += data;
+        });
+        serverProc.stdout.on('end', function() {
+            console.log(mcout);
+        });
+*/
     },
+    //TODO:need to put server proc in an array of running processes
+    //TODO: add a signal to say that the server has launched is greenlighted for players
+    //TODO: log the launch of the server ?
     startServer: function() {
         console.log(process.cwd());
-        serverProc = exec.spawn(
+        serverProc = exec.execFile(
                 "java",
                 ['-Xms512M', '-Xmx512M', '-jar', serverData.serverJar, 'nogui'],
                 { cwd: process.cwd()+"/gameServers/"+serverData.serverDir});
-    },
+
+/*        serverProc.stdout.on('data', function(data){
+            mcout += data;
+        });
+        serverProc.stdout.on('end', function(){
+            console.log(mcout);
+        });
+        mcout = ' ';
+*/
+     },
     stopServer: function() {
+        console.log("sending stop");
         serverProc.stdin.write('stop \n');
+        serverProc.stdout.pipe(process.stdout);
+        serverProc.stdin.end();
+ /*       serverProc.stdout.on('data', function(data){
+            //console.log(data);
+            mcout += data;
+        });
+        serverProc.stdout.on('end', function(){
+            console.log(mcout);
+        });
+        mcout= ' ';
+ */
     },
     //finds server info in database
     findServer: function(serverName) {
