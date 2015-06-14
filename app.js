@@ -6,23 +6,23 @@ global.rootRequire = function(name) {
 var express = require('express');
 var app = express();
 var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var session = require('express-session');
-var config = require('./config');
+var config = require('./config/config');
+var dev;
 
 try {
-    var dev = require('./dev-config');
+    dev = require('./config/dev-config');
 } catch (e) {
-    var dev = {};
+    dev = {};
 }
 
 // Set Static files directory
 app.use('/static/', express.static('static'));
-app.set('views', __dirname + '/js');
+app.set('views', __dirname + '/views');
 app.set('view engine', 'jsx');
 app.engine('jsx', require('express-react-views').createEngine());
 
@@ -44,6 +44,12 @@ var server = app.listen(dev.port, function() {
     var port = server.address().port;
 
     console.log('Dongs are listening at http://%s:%s', host, port);
+});
+
+process.on('SIGINT', function() {
+    server.close(function() {
+        process.exit(0);
+    });
 });
 
 module.exports = app;

@@ -2,9 +2,7 @@ var _ = require('lodash');
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var jsx = require('jshint-jsx');
-var concat = require('gulp-concat');
-var rename = require('gulp-rename');
-var uglify = require('gulp-uglify');
+//var uglify = require('gulp-uglify');
 var browserify = require('browserify');
 var strictify = require('strictify');
 var reactify = require('reactify');
@@ -16,20 +14,17 @@ var jshintConfig = packageJSON.jshintConfig;
 jshintConfig.lookup = false;
 
 var jsFiles = [
-    './js/*.js',
-    './js/init/*.jsx',
-    './js/models/*.js',
-    './js/views/*.js',
-    './js/views/dongs/*.js',
-    './js/views/footer/*.js',
-    './js/views/init/*.js',
-    './js/views/login/*.js',
-    './js/views/server-list/*.js',
-    './js/views/topbar/*.js'
+    './models/*.js',
+    './views/components/dongs/*.js',
+    './views/components/footer/*.js',
+    './views/components/login/*.js',
+    './views/components/server-list/*.js',
+    './views/components/topbar/*.js'
 ];
 var coreFiles = [
+    './*.js',
     './core/*.js',
-    './*.js'
+    './core/helpers/*.js'
 ];
 
 gulp.task('lint', function() {
@@ -44,7 +39,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('scripts', function() {
-    browserify('./js/views/login/index.js')
+    browserify('./views/components/login/index.js')
         .transform([
             reactify,
             strictify
@@ -54,7 +49,7 @@ gulp.task('scripts', function() {
         //.pipe(uglify())
         .pipe(gulp.dest('./static/js'));
 
-    return browserify('./js/views/dongs/index.js')
+    return browserify('./views/components/dongs/index.js')
         .transform([
             reactify,
             strictify
@@ -65,8 +60,8 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest('./static/js'));
 });
 
-gulp.task('css', function() {
-    return gulp.src('./css/app.scss')
+gulp.task('styles', function() {
+    return gulp.src('./styles/app.scss')
         .pipe(scss())
         .pipe(gulp.dest('./static/css'));
 });
@@ -75,4 +70,4 @@ gulp.task('watch', function() {
     gulp.watch(jsFiles.concat(coreFiles), ['lint', 'scripts']);
 });
 
-gulp.task('default', ['lint', 'scripts', 'css']);
+gulp.task('default', ['lint', 'scripts', 'styles']);
