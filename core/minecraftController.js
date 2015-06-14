@@ -1,5 +1,5 @@
+var _ = require('lodash');
 var exec = require('child_process');
-var dbDriver = require('../core/mysql-Driver');
 var Q = require('q');
 var serverProcesses = {};
 var serverData = {
@@ -21,26 +21,23 @@ var actions = {
         var deferred = Q.defer();
         if(!serverProcesses[id]) {
             //TODO: log the launch of the server ?
-            // QUESTION: We will need to find a way to load this from somewhere else
-            //              Rather than hardcoded.
             serverProcesses[id] = exec.execFile(
                 "java",
                 ['-Xms512M', '-Xmx512M', '-jar', serverData.serverJar, 'nogui'],
                 { cwd: process.cwd() + "/gameServers/" + serverData.serverDir }
             );
-            // QUESTION: Does this stay open until the process is stopped/killed?
-            //              We may need to end it somehow
-
-            serverProcesses[id].stdout.on('end', function() {
-                debugger;
-                deferred.resolve('Success');
-            });
-
-            serverProcesses[id].stdout.pipe(process.stdout);
             //TODO: add a signal to say that the server has launched is greenlighted for players
             // /Done (2.294s)! For help, type "help" or "?"/
+
+            serverProcesses[id].stdout.on('data', function(data) {
+                console.log(data.toString());
+                if(data.toString().indexOf('Done') >= 0) {
+                    deferred.resolve({status:'Success'});
+                    serverProcesses[id].stdout.removeAllListeners();
+                }
+            });
         } else {
-            deferred.resolve('Failure');
+            deferred.resolve({status:'Failure'});
         }
         return deferred.promise;
     },
@@ -48,75 +45,55 @@ var actions = {
     stop: function(id) {
         var deferred = Q.defer();
         if(serverProcesses[id]) {
-            //TODO Make sure the server shuts down successfully before deleting id
-            serverProcesses[id].stdout.on('end', function() {
-                debugger;
-                deferred.resolve('Success');
+            serverProcesses[id].on('exit', function() {
+                delete serverProcesses[id];
+                deferred.resolve({status:'Success'});
             });
+
             serverProcesses[id].stdin.write('stop\n');
-            serverProcesses[id].stdout.pipe(process.stdout);
-            serverProcesses[id].stdin.end();
-            delete serverProcesses[id];
-            deferred.resolve('Success');
         } else {
-            deferred.resolve('Failure');
+            deferred.resolve({status:'Failure'});
         }
         return deferred.promise;
     },
     // Get Player List
     players: function(id) {
         var deferred = Q.defer();
+        debugger;
         if(serverProcesses[id]) {
-            var output;
-
-            serverProcesses[id].stdout.on('end', function() {
+            serverProcesses[id].stdout.on('data', function(data) {
+                console.log(data.toString());
                 debugger;
-                deferred.resolve('Success');
+                //if(data.toString().indexOf('Done') >= 0) {
+                deferred.resolve({status:'Success'});
+                serverProcesses[id].stdout.removeAllListeners();
+                //}
             });
+
             serverProcesses[id].stdin.write('list\n');
-            serverProcesses[id].stdout.pipe(output);
-            serverProcesses[id].stdin.end();
-            deferred.resolve('Success');
         } else {
-            deferred.resolve('Failure');
+            deferred.resolve({status:'Failure', players:[]});
         }
         return deferred.promise;
     }
 };
 
-
-/*
-//finds server info in database
-var findServer: function(serverName) {
-    //query the db
-    serverData = dbDriver.serverByName(serverName,
-        function(err, res){
-            if(err){
-                console.log(err);
-            }
-            if(!res){
-                return false;
-            } else {
-                return res;
-            }
-        }
-    );
-};
-*/
-
 process.on('exit', function() {
     var servers = _.keys(serverProcesses);
-    _.each(servers, function(id) {
-        stopServer(id);
-    });
+    Q
+        .all(_.map(servers, function(id) {
+            return actions.stop(id);
+        }));
 });
 
 module.exports = {
     action: function(req, res) {
         var id = req.params.id;
         var action = req.query.action;
+        debugger;
         actions[action](id)
             .then(function(results) {
+                debugger;
                 res.status(200).send(results);
             })
             .catch(function(reason) {

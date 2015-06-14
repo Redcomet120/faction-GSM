@@ -6,7 +6,7 @@ var connection = mysql.createConnection({
     password: 'D0ng$'
 });
 
-ServerDBController = {
+var ServerDBController = {
     findServerByName: function(serverName) {
         connection.query('SELECT * FROM `servers` WHERE `name` = "'+ serverName +'"',
             function(err, result){

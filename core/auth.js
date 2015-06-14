@@ -1,8 +1,8 @@
 //==================== Auth module====================
 var LocalStrategy = require('passport-local').Strategy;
 var mysql = require('mysql');
-var config = rootRequire('./config.js');
-var queries = rootRequire('./helpers/queries');
+var queries = require('./helpers/queries');
+var config = rootRequire('./config/config');
 
 // MySQL connection
 var connection = mysql.createConnection(config.mysql);

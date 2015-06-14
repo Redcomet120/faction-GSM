@@ -1,5 +1,3 @@
-var Backbone = require('backbone');
-
 var ServerDBController = require('./mysql-Driver');
 var MCController = require('./minecraftController');
 
@@ -31,7 +29,7 @@ module.exports = function(app, passport) {
 
     // Login local auth redirect
     app.post('/api/login', function(req, res, next) {
-        passport.authenticate('local-login', function(err, user, info) {
+        passport.authenticate('local-login', function(err, user) {
             if (err) { return next(err); }
             if (!user) {
                 return res.status(200).send({
@@ -52,7 +50,7 @@ module.exports = function(app, passport) {
 
     app.get('/login', function(req, res) {
         if(req.user) return res.redirect('/dongs');
-        res.render('init/login');
+        res.render('login');
     });
 
     app.get('/logout', function(req, res) {
@@ -61,8 +59,8 @@ module.exports = function(app, passport) {
     });
 
     app.get('/dongs', function(req, res) {
-        if(!req.user) return res.redirect('/login');
-        res.render('init/dongs');
+        if(!(req.user && req.user.length)) return res.redirect('/login');
+        res.render('dongs', {user: req.user[0].username});
     });
 
     // API for getting the list of servers

@@ -3,8 +3,8 @@ var $ = require('jquery');
 var React = require('react');
 
 // Models
-var LoginModel = require('../../models/login');
-var RegisterModel = require('../../models/register');
+var LoginModel = require('../../../models/login');
+var RegisterModel = require('../../../models/register');
 new LoginModel();
 new RegisterModel();
 

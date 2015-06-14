@@ -7,8 +7,9 @@ var ServersCollection = Backbone.Collection.extend({
             Backbone.on('startServer', function(sid) {
                 if(sid !== this.get('sid')) return;
                 this.fetch({
-                    success: function(model) {
-                        Backbone.trigger('serverStarted', model.toJSON());
+                    success: function(model, response) {
+                        if(response.status === 'Success') return Backbone.trigger('serverStarted');
+                        return Backbone.trigger('failedToStart');
                     },
                     data: { action: 'start' }
                 });
@@ -17,8 +18,8 @@ var ServersCollection = Backbone.Collection.extend({
             Backbone.on('stopServer', function(sid) {
                 if(sid !== this.get('sid')) return;
                 this.fetch({
-                    success: function(model) {
-                        Backbone.trigger('serverStopped', model.toJSON());
+                    success: function() {
+                        Backbone.trigger('serverStopped');
                     },
                     data: { action: 'stop' }
                 });
@@ -27,9 +28,9 @@ var ServersCollection = Backbone.Collection.extend({
             Backbone.on('getPlayers', function(sid) {
                 if(sid !== this.get('sid')) return;
                 this.fetch({
-                    success: function(model) {
+                    success: function(model, response) {
                         debugger;
-                        Backbone.trigger('hasPlayers', model.toJSON());
+                        Backbone.trigger('hasPlayers', response.players);
                     },
                     data: { action: 'players' }
                 });

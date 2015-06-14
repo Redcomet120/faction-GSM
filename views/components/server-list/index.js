@@ -1,5 +1,4 @@
 var Backbone = require('backbone');
-var $ = require('jquery');
 var React = require('react');
 var _ = require('lodash');
 var styles = {
@@ -24,13 +23,19 @@ var Server = React.createClass({
     },
 
     componentDidMount: function(){
-        Backbone.on('serverStarted', function(results) {
+        Backbone.on('serverStarted', function() {
             this.setState({
                 status: "started"
             });
             Backbone.trigger('getPlayers', this.props.server.sid);
         }, this);
-        Backbone.on('serverStopped', function(results) {
+        Backbone.on('failedToStart', function() {
+            this.setState({
+                status: "stopped",
+                error: "Failed to start"
+            });
+        }, this);
+        Backbone.on('serverStopped', function() {
             this.setState({
                 status: "stopped",
                 players: []
@@ -94,7 +99,7 @@ var ServerList = React.createClass({
 
     formatServerList: function() {
         return _.map(this.props.servers, function(server) {
-            return <Server server={ server } key={ server.id }/>
+            return <Server server={ server } key={ server.id }/>;
         });
     },
 
