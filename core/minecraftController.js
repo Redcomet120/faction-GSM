@@ -4,8 +4,8 @@ var Q = require('q');
 var serverProcesses = {};
 var serverData = {
     backupDir: null,
-    serverDir: "survival1.7.10",
-    serverJar: "forge-1.7.10-10.13.2.1291-universal.jar",
+    serverDir: "Vanila",
+    serverJar: "minecraft_server.1.8.7.jar",
     logDir: "null",
     bannedIps: "null",
     bannedPlayers:  "null",

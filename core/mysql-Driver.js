@@ -23,7 +23,13 @@ var ServerDBController = {
             if(err) return res.status(502).send(err);
             return res.status(200).send(result);
         });
-     }
+     },
+    createNewServer : function(ServerData){
+        dataStr = JSON.stringify(ServerData);
+        connection.query("INSERT INTO servers (serverData, name, mods, client, game, gameVer, descr, created)"
+                + "VALUES ('"+dataStr+"', 'working vanila','none','none', 'minecraft', '1.8.X', 'this server is a mod free minecraft instance that is kept up to date with the latest minecraft builds', '"+ new Date()+"')");
+
+    }
 };
 
 module.exports = ServerDBController;

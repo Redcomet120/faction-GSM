@@ -67,4 +67,5 @@ module.exports = function(app, passport) {
     app.get('/api/servers', ServerDBController.getAll);
     // API for game server actions
     app.get('/api/servers/:id', MCController.action);
+
 };
