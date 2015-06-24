@@ -63,8 +63,10 @@ module.exports = function(app, passport) {
         res.render('dongs', {user: req.user[0].username});
     });
 
-    // API for getting the list of servers
     app.get('/api/servers', ServerDBController.getAll);
     // API for game server actions
     app.get('/api/servers/:id', MCController.action);
+    app.get('/api/start', MCController.startServer);
+    app.get('/api/stop', MCController.stopServer);
+    app.get('/api/players', MCController.players);
 };

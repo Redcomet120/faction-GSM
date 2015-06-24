@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var exec = require('child_process');
 var Q = require('q');
-var serverProcesses = {};
+var serverProc = null;
 var serverData = {
     backupDir: null,
     serverDir: "survival1.7.10",
@@ -14,7 +14,9 @@ var serverData = {
     properties: "server.properties",
     worldDir: "world"
 };
+var mcout = ' ';
 
+/*<<<<<<< HEAD
 var actions = {
     // Start Server
     start: function(id) {
@@ -99,5 +101,72 @@ module.exports = {
             .catch(function(reason) {
                 res.status(502).send(reason);
             });
+====== */
+module.exports = {
+    //loads up a server and takes control of it based
+    //on the directory passed in
+    players: function() {
+       // serverProc.stdin.end();
+     // serverProc.stdout.on('data', function(data){
+        serverProc.stdin.write('list \n');
+        serverProc.stdout.pipe(process.stdout);
+//          console.log(data);
+//
+            //mcout += data;
+//        });
+/*        serverProc.stdout.on('end', function() {
+            console.log(mcout);
+        });
+*/
+    },
+    //TODO:need to put server proc in an array of running processes
+    //TODO: add a signal to say that the server has launched is greenlighted for players
+    //TODO: log the launch of the server ?
+    startServer: function() {
+        console.log(process.cwd());
+        serverProc = exec.execFile(
+                "java",
+                ['-Xms512M', '-Xmx512M', '-jar', serverData.serverJar, 'nogui'],
+                { cwd: process.cwd()+"/gameServers/"+serverData.serverDir});
+
+/*        serverProc.stdout.on('data', function(data){
+            mcout += data;
+        });
+        serverProc.stdout.on('end', function(){
+            console.log(mcout);
+        });
+        mcout = ' ';
+*/
+     },
+    stopServer: function() {
+        console.log("sending stop");
+        serverProc.stdin.write('stop \n');
+        serverProc.stdout.pipe(process.stdout);
+        serverProc.stdin.end();
+ /*       serverProc.stdout.on('data', function(data){
+            //console.log(data);
+            mcout += data;
+        });
+        serverProc.stdout.on('end', function(){
+            console.log(mcout);
+        });
+        mcout= ' ';
+ */
+    },
+    //finds server info in database
+    findServer: function(serverName) {
+        //query the db
+        serverData = dbDriver.serverByName(serverName,
+            function(err, res){
+                if(err){
+                    console.log(err);
+                }
+                if(!res){
+                    return false;
+                } else {
+                    return res;
+                }
+            }
+        );
     }
 };

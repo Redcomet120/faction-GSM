@@ -1,6 +1,7 @@
 var Backbone = require('backbone');
 
 var ServersCollection = Backbone.Collection.extend({
+/*<<<<<<< HEAD:models/servers.js
 
     model: Backbone.Model.extend({
         initialize: function() {
@@ -39,6 +40,7 @@ var ServersCollection = Backbone.Collection.extend({
             return 'api/servers/' + this.get('sid');
         }
     }),
+======= */
     parse: function(data) {
         return data;
     },

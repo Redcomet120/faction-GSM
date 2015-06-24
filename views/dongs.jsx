@@ -1,3 +1,5 @@
+var Backbone = require('backbone');
+var $ = require('jquery');
 var React = require('react');
 var TopBar = require('./components/topbar');
 

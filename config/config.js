@@ -9,6 +9,6 @@ module.exports = {
         secret: 'baconTech',
         saveUninitialized: true,
         resave: true,
-        cookie: { maxAge: 24 * 60 * 60 }
+        cookie: { maxAge: 3600000 }
     }
 };
