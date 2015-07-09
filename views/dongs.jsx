@@ -1,6 +1,5 @@
 var React = require('react');
 var TopBar = require('./components/topbar');
-var Footer = require('./components/footer');
 
 var DongsView = React.createClass({
     displayName: "Dongs View",
@@ -12,10 +11,9 @@ var DongsView = React.createClass({
                     <title>DONGS</title>
                     <link rel="stylesheet" type="text/css" href="/static/css/app.css" />
                 </head>
-                <body style={{ height: "100%" }}>
+                <body style={{ height: "100%", background: "url('/static/img/url.jpg')", backgroundSize: "cover" }}>
                     <TopBar user={ this.props.user } />
-                    <div id="content" style={{ height: "100%" }} />
-                    <Footer />
+                    <div id="content"/>
                     <script src="/static/js/index.js" />
                 </body>
             </html>

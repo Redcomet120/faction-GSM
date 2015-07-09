@@ -30,10 +30,8 @@ var Init = React.createClass({
 
     render: function() {
         return (
-            <div style={{ minHeight: '100%', position: 'relative' }}>
-                <div style={{ paddingBottom: '100px' }}>
-                    <ServerList servers={ this.state.servers } />
-                </div>
+            <div>
+                <ServerList servers={ this.state.servers } />
             </div>
         );
     }

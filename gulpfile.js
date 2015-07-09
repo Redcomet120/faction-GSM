@@ -15,6 +15,9 @@ jshintConfig.lookup = false;
 
 var jsFiles = [
     './models/*.js',
+    './views/components/common/button/*.js',
+    './views/components/common/styles/*.js',
+    './views/components/common/title/*.js',
     './views/components/dongs/*.js',
     './views/components/footer/*.js',
     './views/components/login/*.js',
@@ -66,8 +69,13 @@ gulp.task('styles', function() {
         .pipe(gulp.dest('./static/css'));
 });
 
+gulp.task('images', function() {
+    return gulp.src('./images/*')
+        .pipe(gulp.dest('./static/img/'));
+});
+
 gulp.task('watch', function() {
     gulp.watch(jsFiles.concat(coreFiles), ['lint', 'scripts']);
 });
 
-gulp.task('default', ['lint', 'scripts', 'styles']);
+gulp.task('default', ['lint', 'scripts', 'styles', 'images']);
