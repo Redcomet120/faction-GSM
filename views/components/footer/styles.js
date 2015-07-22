@@ -1,7 +1,9 @@
+var COLORS = require('../common/styles/colors');
+
 module.exports = {
     footer: {
-        background: 'red',
-        color: 'white',
+        background: COLORS.red(),
+        color: COLORS.white(),
         width: '100%',
         position: 'absolute',
         bottom: '0',

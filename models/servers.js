@@ -29,7 +29,6 @@ var ServersCollection = Backbone.Collection.extend({
                 if(sid !== this.get('sid')) return;
                 this.fetch({
                     success: function(model, response) {
-                        debugger;
                         Backbone.trigger('hasPlayers', response.players);
                     },
                     data: { action: 'players' }
