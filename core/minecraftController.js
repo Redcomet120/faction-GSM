@@ -22,6 +22,14 @@ var actions = {
         }
         return deferred.promise;
     },
+    test: function(){
+        var deferred = Q.defer();
+        servers[0] = new minecraftDriver.Server("Vanila", "minecraft_server.1.8.7.jar", null);
+        servers[0].start(function(){
+                        console.log("server Test");}
+                        );
+        return deffered = Q.defer();
+    },
     stop: function(id){
         if(!server[id]){
             console.log("Server "+id+" is not running");

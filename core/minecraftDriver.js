@@ -17,7 +17,8 @@ var Q = require('q');
  */
 function Server(dir, jar, options)
 {
-    _.assign(this, args);
+    _.assign(this, options);
+
     this.dir = process.cwd()+ "/gameServers/"+dir;
     this.jar = jar;
     this.players = [];
@@ -34,27 +35,29 @@ Server.prototype.start = function(callback){
     if(game.status == "running"){
         game.emit("error", new Error("Server is already running"));
     }
-    if(game.status == "starting"){
+    else if(game.status == "starting"){
         game.emit("error", new Error("Server is already Starting"));
     }
 
     // fire-off a starting event
     game.emit("starting");
     game.status = "starting";
-
+    console.log(game.jar);
+    console.log(game.dir);
     var proc = exec.spawn("java",
                 ['-Xms512M', '-Xmx512M', '-jar', game.jar, 'nogui'],
-                { cwd: process.cwd() + "/gameServers/" + game.dir }
+                { cwd:game.dir }
     );
 
     //link reader
-    var readByLine = readline.CreateInterface(proc.stdout, devnull());
+    var readByLine = readline.createInterface(proc.stdout, devnull());
 
     //handle launch errors
     proc.on('error', function(err){
         game.status = "Error";
         game.emit('error', err);
     });
+
 
     //handle premature close
      proc.on('close' , function(close, reason){
@@ -68,8 +71,10 @@ Server.prototype.start = function(callback){
 
      //set up trigger to digest proc output
      readByLine.on('line', function(line){
+         console.log(line);
          game.digest(line);
      });
+     console.log("end?");
 };
 
 //regex for Minecraft out syntax
@@ -130,7 +135,7 @@ Server.prototype.digest = function(line){
             raw: line
         }
         game.emit('message', message);
-        _.value(msgCatcher).foreach(function(cases){
+        _.values(msgCatcher).forEach(function(cases){
             var filtered = cases.regex.exec(message.body);
             var caller;
             if(filtered){
@@ -144,7 +149,7 @@ Server.prototype.digest = function(line){
             game.emit('unknownMsg', message);
         }
         else{
-            game.emit('unknownLn', raw);
+            game.emit('unknownLn', message.raw);
         }
     }
 }
