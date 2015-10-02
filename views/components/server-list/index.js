@@ -1,7 +1,7 @@
-var Backbone = require('backbone');
 var React = require('react');
 var _ = require('lodash');
 var COLORS = require('../common/styles/colors');
+var ServerListActions = require('../../../flux/actions/server-list');
 
 var Server = React.createClass({
     displayName: 'Server',
@@ -21,48 +21,17 @@ var Server = React.createClass({
         }
     },
 
-    getDefaultProps: function() {
-        return { server: {} };
-    },
     getInitialState: function() {
         return {
-            status: 'stopped',
-            players: [],
             hover: false
         };
     },
 
-    componentDidMount: function(){
-        Backbone.on('serverStarted', function() {
-            this.setState({ status: 'started' });
-            Backbone.trigger('getPlayers', this.props.server.sid);
-        }, this);
-        Backbone.on('failedToStart', function() {
-            this.setState({
-                status: 'stopped',
-                error: 'Failed to start'
-            });
-        }, this);
-        Backbone.on('serverStopped', function() {
-            this.setState({
-                status: 'stopped',
-                players: []
-            });
-        }, this);
-        Backbone.on('hasPlayers', function(players) {
-            this.setState({ players: players });
-        }, this);
-        Backbone.trigger('getPlayers', this.props.server.sid);
-    },
-
     startServer: function() {
-        Backbone.trigger('startServer', this.props.server.sid);
+        ServerListActions.startServer(this.props.server.sid);
     },
     stopServer: function() {
-        Backbone.trigger('stopServer', this.props.server.sid);
-    },
-    getPlayers: function() {
-        Backbone.trigger('getPlayers', this.props.server.sid);
+        ServerListActions.stopServer(this.props.server.sid);
     },
     mouseOver: function() {
         this.setState({ hover: true });
@@ -104,12 +73,6 @@ var Server = React.createClass({
 
 var ServerList = React.createClass({
     displayName: 'Server List',
-
-    getDefaultProps: function() {
-        return {
-            servers: []
-        };
-    },
 
     styles: {
         list: {

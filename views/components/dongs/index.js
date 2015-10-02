@@ -1,31 +1,21 @@
-var Backbone = require('backbone');
 var $ = require('jquery');
 var React = require('react');
 var ServerList = require('../server-list');
-
-var ServersCollection = require('../../../models/servers');
-new ServersCollection();
+var ServerListStore = require('../../../flux/stores/server-list');
 
 var Init = React.createClass({
     displayName: 'Init',
 
-    getInitialState: function() {
-        return {
-            servers: []
-        };
+    componentWillMount: function() {
+        this.setState(ServerListStore.toJSON());
     },
 
-    componentDidMount: function(){
-        window.Backbone = Backbone;
-        window.$ = $;
-        window.Backbone.$ = $;
+    componentDidMount: function() {
+        ServerListStore.on('change', this.setStateFromStore);
+    },
 
-        Backbone.on('hasServers', function(servers) {
-            this.setState({
-                servers: servers
-            });
-        }, this);
-        Backbone.trigger('getServers');
+    setStateFromStore: function(model) {
+        this.setState(model.toJSON());
     },
 
     render: function() {
