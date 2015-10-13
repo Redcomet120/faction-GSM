@@ -18,7 +18,7 @@ module.exports = function(app, passport) {
             }
             req.logIn(user, function(err) {
                 if (err) return next(err);
-                res.set('location', '/dongs');
+                res.set('location', '/servers/list');
                 return res.status(200).send({
                     'status': 'success',
                     'user': this.username
@@ -39,7 +39,7 @@ module.exports = function(app, passport) {
             }
             req.logIn(user, function(err) {
                 if (err) return next(err);
-                res.set('location', '/dongs');
+                res.set('location', '/servers/list');
                 return res.status(200).send({
                     'status': 'success',
                     'user': this.username
@@ -49,7 +49,7 @@ module.exports = function(app, passport) {
     });
 
     app.get('/login', function(req, res) {
-        if(req.user) return res.redirect('/dongs');
+        if(req.user) return res.redirect('/servers/list');
         res.render('login');
     });
 
@@ -58,7 +58,7 @@ module.exports = function(app, passport) {
         res.redirect('/login');
     });
 
-    app.get('/dongs', function(req, res) {
+    app.get('/servers/list', function(req, res) {
         if(!(req.user && req.user.length)) return res.redirect('/login');
         res.render('dongs', {user: req.user[0].username});
     });

@@ -1,7 +1,9 @@
 var $ = require('jquery');
 var React = require('react');
+var Backbone = require('backbone');
 var ServerList = require('../server-list');
 var ServerListStore = require('../../../flux/stores/server-list');
+var Router = require('../../../js/router.js');
 
 var Init = React.createClass({
     displayName: 'Init',
@@ -26,5 +28,7 @@ var Init = React.createClass({
         );
     }
 });
+
+    Backbone.history.start({pushState:true}),
 
 React.render(<Init />, document.getElementById('content'));
