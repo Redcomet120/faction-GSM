@@ -4,14 +4,11 @@ var ServerList = require('../flux/actions/server-list');
 var Router = Backbone.Router.extend({
 
     routes: {
-        "server/list":  "serverList"
+        "servers/list":  "serverList"
     },
     serverList : function(){
-        debugger;
-        ServerList.getServerlist();
+        ServerList.getServerList();
     }
 });
 
-Backbone.history.start({pushState:true}),
-
-module.exports = new Router;
+module.exports = Router;

@@ -15,6 +15,7 @@ jshintConfig.lookup = false;
 
 var jsFiles = [
     './models/*.js',
+    './js/*.js',
     './views/components/common/button/*.js',
     './views/components/common/styles/*.js',
     './views/components/common/title/*.js',

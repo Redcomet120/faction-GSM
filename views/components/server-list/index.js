@@ -49,8 +49,8 @@ var Server = React.createClass({
                     <div className='row'>
                         <h3 className='small-4 column'>{ this.props.server.name }</h3>
                         <div className='small-3 column'>IP</div>
-                        <div className='small-3 column'>Status: { this.state.status }</div>
-                        <div className='small-2 column' onClick={ this.getPlayers } style={ this.styles.button }>Players: { this.state.players.length }</div>
+                        <div className='small-3 column'>Status: { this.props.server.status }</div>
+                        <div className='small-2 column' style={ this.styles.button }>Players: { this.props.server.players }</div>
                     </div>
                     <div className='row'>
                         <div className='small-7 column'>{ this.props.server.descr }</div>
@@ -85,7 +85,11 @@ var ServerList = React.createClass({
 
     formatServerList: function() {
         return _.map(this.props.servers, function(server, index) {
-            return <Server server={ server } key={ server.id } index={ index }/>;
+            return <Server
+                server={ server }
+                key={ server.id }
+                index={ index }
+            />;
         });
     },
 

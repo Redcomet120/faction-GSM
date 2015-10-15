@@ -4,6 +4,9 @@ var Backbone = require('backbone');
 var ServerList = require('../server-list');
 var ServerListStore = require('../../../flux/stores/server-list');
 var Router = require('../../../js/router.js');
+window.$ = $;
+window.Backbone = Backbone;
+window.Backbone.$ = window.$;
 
 var Init = React.createClass({
     displayName: 'Init',
@@ -14,6 +17,8 @@ var Init = React.createClass({
 
     componentDidMount: function() {
         ServerListStore.on('change', this.setStateFromStore);
+        new Router;
+        Backbone.history.start({pushState:true});
     },
 
     setStateFromStore: function(model) {
@@ -28,7 +33,5 @@ var Init = React.createClass({
         );
     }
 });
-
-    Backbone.history.start({pushState:true}),
 
 React.render(<Init />, document.getElementById('content'));
