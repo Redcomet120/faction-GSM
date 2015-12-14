@@ -27,8 +27,8 @@ var Login = React.createClass({
         e.preventDefault();
         var target = $(e.target);
         var credentials = {
-            username: target.parent().siblings('.username').children('input').val(),
-            password: target.parent().siblings('.password').children('input').val()
+            username: target.parent().parent().find('.username').val(),
+            password: target.parent().parent().find('.password').val()
         };
 
         Backbone.trigger('login', credentials);
@@ -55,41 +55,31 @@ var Login = React.createClass({
         conf.css('background', 'red');
     },
 
-    getContent: function() {
-        if(this.state.signup)
-            return (
-                <form>
-                    <label className="confirm-password">
-                        <span>Confirm Password:</span>
-                        <input type="password" />
-                    </label>
-                    <button onClick={this.signup}>Register</button>
-                    <button onClick={this.register}>Go back to Login</button>
-                </form>
-            );
-
-        return (
-            <form>
-                <button onClick={this.login}>Login</button>
-                <button onClick={this.register}>Register</button>
-            </form>
-        );
-    },
     render: function() {
         return (
-            <div className="row">
-                <div className="small-12 columns">
-                    <h1>Welcome to Dongs!</h1>
-                    <label className="username">
-                        <span>Username:</span>
-                        <input type="text" />
-                    </label>
-                    <label className="password">
-                        <span>Password:</span>
-                        <input type="password" />
-                    </label>
-                    {this.getContent()}
-                </div>
+            <div className="loginBody">
+                <div className="loginCont">
+                    <div>
+                        <img src="/static/img/logo.png" className="img-rounded" alt="Faction Logo" width="300"/>
+                    </div>
+                    <div className="btn-group">
+                        <button onClick={this.login}>Login</button>
+                        <button  className="btn btn-danger">Register</button>
+                   </div>
+                    <div className="form-group">
+                        <label form="username"><i className="fa fa-user"/>
+                            Username:
+                        </label>
+                        <input type="text" className="username" />
+                    </div>
+                    <div className="form-group">
+                        <label form="password">
+                            <i className="fa fa-key"/>
+                            Password:
+                        </label>
+                        <input type="password" className="password" />
+                    </div>
+                 </div>
             </div>
         );
     }
