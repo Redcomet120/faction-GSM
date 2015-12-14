@@ -1,0 +1,58 @@
+
+.listWrapper{
+    border: 5px solid rgba(0,0,0,0.5);
+    border-radius: 25px;
+    box-shadow: 0px 0px 24px 10px rgba(0,0,0,0.6);
+    overflow: hidden;
+    margin: 25px auto;
+    width: 75%
+}
+
+.listHeader{
+    background: rgba(177,177,177,0.8);
+    font-size: 20pt;
+    padding: 5px 0px 5px 0px;
+}
+
+.listItems{
+    overflow: auto;
+    max-height: 400px;
+}
+.listItem{
+    height: 50px;
+    padding: 5px 0px 5px 0px;
+
+    &:nth-child(even){
+        background: rgba(198, 198, 198, 0.8);
+    }
+
+    &:nth-child(odd){
+        background: rgba(177, 177, 177, 0.8);
+    }
+}
+@mixin listHead(){
+    display: inline-block;
+    font-size: 16pt;
+}
+
+.listTitle{
+    @include listHead();
+    padding-left: 15px;
+    width: 30%;
+}
+
+.listIP{
+    @include listHead();
+    width: 30%;
+ }
+
+ .listStatus{
+    @include listHead();
+    width:20%;
+ }
+
+ .listButton{
+    @include listHead();
+    text-align: right;
+    width:17%;
+ }
