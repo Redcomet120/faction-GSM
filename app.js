@@ -46,10 +46,4 @@ var server = app.listen(dev.port, function() {
     console.log('Dongs are listening at http://%s:%s', host, port);
 });
 
-process.on('SIGINT', function() {
-    server.close(function() {
-        process.exit(0);
-    });
-});
-
 module.exports = app;
