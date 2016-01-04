@@ -62,22 +62,26 @@ var Login = React.createClass({
                     <div>
                         <img src="/static/img/logo.png" className="img-rounded" alt="Faction Logo" width="300"/>
                     </div>
-                    <div className="btn-group">
-                        <button onClick={this.login}>Login</button>
-                        <button  className="btn btn-danger">Register</button>
-                   </div>
-                    <div className="form-group">
-                        <label form="username"><i className="fa fa-user"/>
-                            Username:
-                        </label>
-                        <input type="text" className="username" />
-                    </div>
-                    <div className="form-group">
-                        <label form="password">
-                            <i className="fa fa-key"/>
-                            Password:
-                        </label>
-                        <input type="password" className="password" />
+                    <div className="loginForm">
+                        <div className="btn-group">
+                            <button className="btn btn-info" onClick={this.login}>Login</button>
+                            <button  className="btn btn-info">Register</button>
+                       </div>
+                        <div className="form-group">
+                            <label form="username"><i className="fa fa-user"/>
+                                Username:
+                            </label>
+                            <br/>
+                            <input type="text" className="username" />
+                        </div>
+                        <div className="form-group">
+                            <label form="password">
+                                <i className="fa fa-key"/>
+                                Password:
+                            </label>
+                            <br/>
+                            <input type="password" className="password" />
+                         </div>
                     </div>
                  </div>
             </div>

@@ -24,8 +24,8 @@ var Server = React.createClass({
                 <div className="listIP"><i className="fa fa-gear"/>IP HERE</div>
                 <div className="listStatus">{this.state.status}</div>
                 <div className="listButton">
-                    <button>
-                        button
+                    <button className="btn btn-success">
+                        Start
                     </button>
                 </div>
             </div>
