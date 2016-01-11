@@ -16,16 +16,28 @@ var Server = React.createClass({
     stopServer: function() {
         ServerListActions.stopServer(this.props.sid);
     },
-
+    handleToggle: function() {
+       if(this.state.status === 'stopped'){
+            this.startServer();
+       }else{
+            this.stopServer();
+       }
+    },
     render: function(){
+        var buttonText = 'Stop';
+        var buttonClass = 'btn-danger';
+        if(this.state.status === 'stopped') {
+            buttonText = 'Start';
+            buttonClass = 'btn-success';
+        }
         return(
             <div className='listItem'>
                 <div className="listTitle">{this.props.name}</div>
                 <div className="listIP"><i className="fa fa-gear"/>IP HERE</div>
                 <div className="listStatus">{this.state.status}</div>
                 <div className="listButton">
-                    <button className="btn btn-success">
-                        Start
+                    <button className={"btn " + buttonClass} onClick={this.handleToggle}>
+                        {buttonText}
                     </button>
                 </div>
             </div>
