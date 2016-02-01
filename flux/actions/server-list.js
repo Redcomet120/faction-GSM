@@ -1,5 +1,6 @@
 var Dispatcher = require('../dispatcher');
 var _ = require('lodash');
+var mcDriver = require('../../core/minecraftController.js');
 require('whatwg-fetch');
 
 var theAlmightyGlowCloud = function(url, method, body) {
@@ -32,8 +33,18 @@ module.exports = {
                 console.log(err);
             });
     },
-    startServer: function() {
+    startServer: function(id) {
+        var url = '/api/servers/' + id + '?action=start';
+        return theAlmightyGlowCloud(url)
+            .catch(function(err) {
+                console.log(err);
+            });
     },
-    stopServer: function() {
+    stopServer: function(id) {
+        var url = '/api/servers/' + id + '?action=stop';
+        return theAlmightyGlowCloud(url)
+            .catch(function(err) {
+                console.log(err);
+            });
     }
 };

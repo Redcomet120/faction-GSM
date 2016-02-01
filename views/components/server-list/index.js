@@ -21,10 +21,10 @@ var Server = React.createClass({
         return(
             <div className='listItem'>
                 <div className="listTitle">{this.props.name}</div>
-                <div className="listIP"><i className="fa fa-gear"/>IP HERE</div>
+                <div className="listIP"><i className="fa fa-wifi"/>IP HERE</div>
                 <div className="listStatus">{this.state.status}</div>
                 <div className="listButton">
-                    <button className="btn btn-success">
+                    <button className="btn btn-success" onClick={this.startServer}>
                         Start
                     </button>
                 </div>
