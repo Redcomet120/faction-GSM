@@ -4,7 +4,7 @@ Faction distributed online network game servers
 <h2>What is Distributed Online Network Game Servers ?</h2>
 <p>Distrubted Online Network Game Servers is a node JS application designed to manage multiple game servers easily.
 The application is aimed primarily at minecraft, Terraria, and games of that nature. Users of this software can
-install it on an older desktop or laptop computer and load their gameservers into the system. Thier are roles and
+install it on an older desktop or laptop computer and load their gameservers into the system. There are roles and
 permissions that will limit what individual users and players can do to their servers. Regular players will be
 able to login and start and stop servers they would like to play. </p>
 
@@ -24,6 +24,7 @@ able to login and start and stop servers they would like to play. </p>
 <p>views - JSX view files. Views that are rendered as html and sent to the client.</p>
 <p> - components - JS view files. These are React components that act as our scripts.</p>
 
+
 <h3>Branches</h3>
 <p>master - main branch where all functions are pulled in.</p>
 <p>logins - login branch contains the working code for login and suthentication functionality</p>
@@ -36,5 +37,5 @@ able to login and start and stop servers they would like to play. </p>
 <li>browserify</li>
 <li>Passport</li>
 <li>MySQL</li>
-<li>React/li>
+<li>React</li>
 </ul>
