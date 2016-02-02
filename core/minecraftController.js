@@ -1,10 +1,13 @@
 var exec = require('child_process');
+var db = ('./mysql-Driver');
+var serverData = null;
 var MC_Server = null;
 var actions = {
 
     //start server
     start: function(id){
-        console.log(process.cwd());
+        //serverData = db.findServerByID(id);
+        console.log(id);
         MC_Server = exec.spawn(
             "java",
             [
@@ -18,6 +21,9 @@ var actions = {
                 cwd: process.cwd() + "/gameServers/survival1.7.10/"
             }
         );
+        MC_Server.stdout.on('data', function(data){
+            console.log(data.toString());
+        });
     },
 
     stop: function(id){
