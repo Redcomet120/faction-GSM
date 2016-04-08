@@ -1,34 +1,46 @@
 var exec = require('child_process');
+var readline = require('readline');
 var db = ('./mysql-Driver');
-var serverData = null;
-var MC_Server = null;
+var net = require('net');
+
+var socket;
+var path, jar, ram;
+var MC_Servers = [];
 var actions = {
 
-    //start server
+    //scrap most of this. do a dtatbase lookup and spawn a new processr
     start: function(id){
-        //serverData = db.findServerByID(id);
-        console.log(id);
-        MC_Server = exec.spawn(
-            "java",
-            [
-                '-Xms512M',
-                '-Xmx512M',
-                '-jar',
-                'forge-1.7.10-10.13.2.1291-universal.jar',
-                'nogui'
-            ],
-            {
-                cwd: process.cwd() + "/gameServers/survival1.7.10/"
-            }
-        );
-        MC_Server.stdout.on('data', function(data){
-            console.log(data.toString());
-        });
-    },
+        //take the ID and get the Database info
 
+        // start the child node process
+        // MC_Servers[id] = exec.fork('core/minecraftDriver.js',[
+        //      path, jar, ram, id
+        //]);
+        // TEST CODE:
+        if(id == 1){
+            MC_Servers[id] = exec.fork('core/minecraftDriver.js',[
+                "/gameServers/survival1.7.10/",
+                'forge-1.7.10-10.13.2.1291-universal.jar',
+                '512',
+                id
+            ]);
+            console.log("launching survival");
+        }else{
+            MC_Servers[id] = exec.fork('core/mincraftDrivers.js',[
+                "/gameServers/Vanila" ,
+                'minecraft_server.1.8.7.jar',
+                '512',
+                id
+            ]);
+            console.log("launching Vanila");
+        }
+    },
     stop: function(id){
+        MC_Servers[id].write('/stop');
     }
 };
+
+// somewhere we need to kickoff a socket to listen to our child processes
 
 module.exports = {
     action: function(req, res){
