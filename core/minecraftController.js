@@ -1,9 +1,7 @@
 var exec = require('child_process');
 var readline = require('readline');
 var db = ('./mysql-Driver');
-var net = require('net');
 
-var socket;
 var path, jar, ram;
 var MC_Servers = [];
 var actions = {
@@ -16,6 +14,11 @@ var actions = {
         // MC_Servers[id] = exec.fork('core/minecraftDriver.js',[
         //      path, jar, ram, id
         //]);
+        //
+        // MC_Servers[id].on('message',function(m){
+        //        console.log('we got message:',m);
+        // });
+
         // TEST CODE:
         if(id == 1){
             MC_Servers[id] = exec.fork('core/minecraftDriver.js',[
@@ -24,19 +27,27 @@ var actions = {
                 '512',
                 id
             ]);
+            MC_Servers[id].on('message',function(m){
+                console.log('we got message:',m);
+            });
             console.log("launching survival");
         }else{
-            MC_Servers[id] = exec.fork('core/mincraftDrivers.js',[
+
+            MC_Servers[id] = exec.fork('core/minecraftDriver.js',[
                 "/gameServers/Vanila" ,
                 'minecraft_server.1.8.7.jar',
                 '512',
                 id
             ]);
+
             console.log("launching Vanila");
+             MC_Servers[id].on('message',function(m){
+                console.log('we got message:',m);
+            });
         }
     },
     stop: function(id){
-        MC_Servers[id].write('/stop');
+        MC_Servers[id].send('stop');
     }
 };
 

@@ -10,7 +10,9 @@ var MyID = process.argv[5];
 
 function stop(){
     MC_Proc.stdin.write('/stop');
-    MC_Proc.on('close', console.log("successful close"));
+    MC_Proc.on('close', function(code){
+        console.log('Exiting child process with code:'+code);
+    });
 }
 
 
@@ -25,13 +27,17 @@ function start(path, jar, ram){
             'nogui'
         ],
         { cwd: process.cwd() + path});
-
+        process.on('message',function(m){
+       console.log('child fot message:',m);
+        if(m==='stop')stop();
+    });
     readline.createInterface({
         input: MC_Proc.stdout
     }).on('line', function(line){
         if(line.indexOf('Done (') > 0){
             console.log("hey It's running. we should probably tell someone");
            // stop();
+            process.send('started'+ MyID);
         }
     });
 }
