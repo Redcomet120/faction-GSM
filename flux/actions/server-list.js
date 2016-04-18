@@ -1,6 +1,5 @@
 var Dispatcher = require('../dispatcher');
 var _ = require('lodash');
-var mcDriver = require('../../core/minecraftController.js');
 require('whatwg-fetch');
 
 var theAlmightyGlowCloud = function(url, method, body) {
@@ -11,8 +10,14 @@ var theAlmightyGlowCloud = function(url, method, body) {
         }
     };
     if(method) _.extend(options, { method: method });
-    if(body) _.extend(options, { body: JSON.stringify(body) });
-
+    if(body) {
+        if(method === 'get') {
+            url += '?' + JSON.stringify(body);
+        } else {
+            _.extend(options, { body: JSON.stringify(body) });
+        }
+    }
+    
     return fetch(url, options)
         .then(function(response) {
             return response.json();
