@@ -5,11 +5,6 @@ var ServerListActions = require('../../../flux/actions/server-list');
 var Server = React.createClass({
     displayName: 'Server',
 
-    getInitialState: function() {
-        return {
-            status: 'stopped'
-        };
-    },
     startServer: function() {
         ServerListActions.startServer(this.props.sid);
     },
@@ -22,7 +17,7 @@ var Server = React.createClass({
             <div className='listItem'>
                 <div className="listTitle">{this.props.name}</div>
                 <div className="listIP"><i className="fa fa-wifi"/>IP HERE</div>
-                <div className="listStatus">{this.state.status}</div>
+                <div className="listStatus">{this.props.status}</div>
                 <div className="listButton">
                     <button className="btn btn-success" onClick={this.startServer}>
                         Start
@@ -37,8 +32,8 @@ var ServerList = React.createClass({
     displayName: 'Server List',
 
     formatServerList: function(){
-        return _.map(this.props.servers, function(server){
-            return <Server {...server} key={ server.sid } />;
+        return _.map(this.props.servers, function(server, id){
+            return <Server {...server} key={ id } />;
         });
     },
     render: function(){
@@ -55,7 +50,7 @@ var ServerList = React.createClass({
                             </button>
                         </div>
                     </div>
-                   <div> { this.formatServerList() }</div>
+                    <div> { this.formatServerList() }</div>
                 </div>
             </div>
         );
