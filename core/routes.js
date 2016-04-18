@@ -1,4 +1,4 @@
-var ServerDBController = require('./mysql-driver');
+var ServerController = require('./server-controller');
 var MCController = require('./minecraftController');
 
 // Redirects
@@ -64,7 +64,7 @@ module.exports = function(app, passport) {
     });
 
     // API for getting the list of servers
-    app.get('/api/servers', ServerDBController.getAll);
+    app.get('/api/servers', ServerController.getAll);
     // API for game server actions
     app.get('/api/servers/:id', MCController.action);
 };
