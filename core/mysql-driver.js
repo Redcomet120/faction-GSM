@@ -1,3 +1,4 @@
+var _ = require('lodash');
 var mysql = require('mysql');
 var connection = mysql.createConnection({
     host    : 'localhost',
@@ -16,14 +17,19 @@ var ServerDBController = {
                 return result;
             }
         );
-     },
+    },
     //TODO: fix the SQL query
-     getAll: function(req, res) {
+    getAll: function(req, res) {
         connection.query('SELECT * FROM `servers`', function(err, result) {
-            if(err) return res.status(502).send(err);
-            return res.status(200).send(result);
+            if(err) {
+                return res.status(502).send(err);
+            }
+            var servers = _.mapKeys(result, function(server) {
+                return server.sid;
+            });
+            return res.status(200).send(servers);
         });
-     }
+    }
 };
 
 module.exports = ServerDBController;
