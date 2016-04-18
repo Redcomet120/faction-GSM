@@ -1,4 +1,4 @@
-var ServerDBController = require('./mysql-Driver');
+var ServerDBController = require('./mysql-driver');
 var MCController = require('./minecraftController');
 
 // Redirects
