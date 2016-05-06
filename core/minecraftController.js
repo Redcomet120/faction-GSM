@@ -1,14 +1,13 @@
 var _ = require('lodash');
 var exec = require('child_process');
-var readline = require('readline');
 var mysqlDriver = require('./mysql-driver');
 
-var path, jar, ram;
 var mcServers = [];
 var actions = {
 
     //scrap most of this. do a dtatbase lookup and spawn a new processr
-    start: function(id){
+    start: function(id, io){
+        io.emit("start", id);
         if(mcServers[id]){
             console.log("Server is already running");
             return;
@@ -35,7 +34,7 @@ var actions = {
             });
         });
     },
-    stop: function(id){
+    stop: function(id, io){
         if(!_.isEmpty(mcServers[id])) {
             mcServers[id].send('stop');
         } else {
@@ -47,12 +46,12 @@ var actions = {
 // somewhere we need to kickoff a socket to listen to our child processes
 
 module.exports = {
-    action: function(req, res){
+    action: function(req, res, io){
         var id = req.params.id;
         var action = req.query.action;
-        actions[action](id);
+        actions[action](id, io);
             //.then(function(results){
-                res.status(200).send('ok');//results);
+                res.status(200).send();//results);
             //})
             //.catch(function(reason){
                 //res.status(502).send(reason);

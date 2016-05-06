@@ -1,9 +1,6 @@
-var events = require("events");
 var proc = require('child_process');
 var readline = require('readline');
-var net = require('net');
-
-var serverData = null;
+var _ = require('lodash');
 var MC_Proc = null;
 var players = [];
 var MyID = process.argv[5];
@@ -40,6 +37,7 @@ function start(path, jar, ram){
     readline.createInterface({
         input: MC_Proc.stdout
     }).on('line', function(line){
+        var p;
         if(line.indexOf('Done (') > 0){
             process.send({
                 id: MyID,
@@ -47,7 +45,7 @@ function start(path, jar, ram){
                 players: players
             });
         }else if(line.indexOf('joined the game')>0){
-            var p = line.split(' ')[3];
+            p = line.split(' ')[3];
             players.push(p);
             console.log('Added Player: ' + p);
             process.send({
@@ -56,7 +54,7 @@ function start(path, jar, ram){
                 players: players
             });
         }else if(line.indexOf('left the game')>0){
-            var p = line.split(' ')[3];
+            p = line.split(' ')[3];
             console.log('Removing Player: ' + p);
             _.remove(players, p);
             process.send({

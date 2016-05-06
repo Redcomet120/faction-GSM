@@ -2,7 +2,7 @@ var ServerController = require('./server-controller');
 var MCController = require('./minecraftController');
 
 // Redirects
-module.exports = function(app, passport) {
+module.exports = function(app, passport, io) {
     app.get('/', function(req, res) {
         res.redirect('/login');
     });
@@ -66,5 +66,7 @@ module.exports = function(app, passport) {
     // API for getting the list of servers
     app.get('/api/servers', ServerController.getAll);
     // API for game server actions
-    app.get('/api/servers/:id', MCController.action);
+    app.get('/api/servers/:id', function(req, res){
+        MCController.action(req, res, io);
+    });
 };

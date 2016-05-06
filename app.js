@@ -5,6 +5,7 @@ global.rootRequire = function(name) {
 // Required modules
 var express = require('express');
 var app = express();
+var http = require('http');
 var passport = require('passport');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -36,12 +37,15 @@ app.use(session(config.session));
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('./core/auth')(passport);
-require('./core/routes')(app, passport);
+var server = http.createServer(app);
+var io = require("socket.io").listen(server);
 
-var server = app.listen(dev.port, function() {
-    var host = server.address().address;
-    var port = server.address().port;
+require('./core/auth')(passport);
+require('./core/routes')(app, passport, io);
+
+server.listen(dev.port, function() {
+    var host = this.address().address;
+    var port = this.address().port;
 
     console.log('Dongs are listening at http://%s:%s', host, port);
 });
