@@ -1,0 +1,16 @@
+{
+    "mysql": {
+        "host"     : "",
+        "database" : "",
+        "user"     : "",
+        "password" : ""
+    },
+    "session": {
+        "secret": "",
+        "saveUninitialized": false,
+        "resave": false,
+        "cookie": {
+            "maxAge": 86400
+        }
+    }
+}

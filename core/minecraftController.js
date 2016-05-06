@@ -1,53 +1,46 @@
+var _ = require('lodash');
 var exec = require('child_process');
 var readline = require('readline');
-var db = ('./mysql-Driver');
+var mysqlDriver = require('./mysql-driver');
 
 var path, jar, ram;
-var MC_Servers = [];
+var mcServers = [];
 var actions = {
 
     //scrap most of this. do a dtatbase lookup and spawn a new processr
     start: function(id){
-        //take the ID and get the Database info
-
-        // start the child node process
-        // MC_Servers[id] = exec.fork('core/minecraftDriver.js',[
-        //      path, jar, ram, id
-        //]);
-        //
-        // MC_Servers[id].on('message',function(m){
-        //        console.log('we got message:',m);
-        // });
-
-        // TEST CODE:
-        if(id == 1){
-            MC_Servers[id] = exec.fork('core/minecraftDriver.js',[
-                "/gameServers/survival1.7.10/",
-                'forge-1.7.10-10.13.2.1291-universal.jar',
-                '512',
-                id
-            ]);
-            MC_Servers[id].on('message',function(m){
-                console.log('we got message:',m);
-            });
-            console.log("launching survival");
-        }else{
-
-            MC_Servers[id] = exec.fork('core/minecraftDriver.js',[
-                "/gameServers/Vanila" ,
-                'minecraft_server.1.8.7.jar',
-                '512',
-                id
-            ]);
-
-            console.log("launching Vanila");
-             MC_Servers[id].on('message',function(m){
-                console.log('we got message:',m);
-            });
+        if(mcServers[id]){
+            console.log("Server is already running");
+            return;
         }
+        //take the ID and get the Database info
+        mysqlDriver.findServerByID(id,function(err, result){
+            if(err || _.isEmpty(result)) {
+                console.log("Failed to obtain server with ID:", id);
+                return;
+            }
+
+            var serverData = JSON.parse(_.first(result).serverData);
+
+            // start the child node process
+            mcServers[id] = exec.fork('core/minecraftDriver.js',[
+                '/gameServers/' + serverData.serverDir + '/',
+                serverData.serverJar,
+                '512',
+                id
+            ]);
+
+            mcServers[id].on('message', function(m){
+                console.log('We got message:', m);
+            });
+        });
     },
     stop: function(id){
-        MC_Servers[id].send('stop');
+        if(!_.isEmpty(mcServers[id])) {
+            mcServers[id].send('stop');
+        } else {
+            console.log('Server ' + id + ' is not currently running.');
+        }
     }
 };
 

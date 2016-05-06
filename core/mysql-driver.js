@@ -1,13 +1,12 @@
 var _ = require('lodash');
 var mysql = require('mysql');
-var connection = mysql.createConnection({
-    host    : 'localhost',
-    database: 'dongs',
-    user    : 'dongs',
-    password: 'D0ng$'
-});
+var config = require('./config.json');
+var connection = mysql.createConnection(config.mysql);
 
 var mysqlDriver = {
+    findServerByID: function(serverID, callback) {
+        connection.query('SELECT * FROM `servers` WHERE `sid` = "'+ serverID +'"', callback);
+    },
     findServerByName: function(serverName, callback) {
         connection.query('SELECT * FROM `servers` WHERE `name` = "'+ serverName +'"', callback);
     },

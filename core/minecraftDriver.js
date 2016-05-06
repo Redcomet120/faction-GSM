@@ -5,59 +5,69 @@ var net = require('net');
 
 var serverData = null;
 var MC_Proc = null;
+var players = [];
 var MyID = process.argv[5];
-//var MCEmitter = new EventEmitter();
 
 function stop(){
-    MC_Proc.stdin.write('/stop');
+    MC_Proc.stdin.write('/stop\n');
     MC_Proc.on('close', function(code){
-        console.log('Exiting child process with code:'+code);
+        console.log('Exiting child process with code:', code);
     });
 }
-
 
 //spawn a child process that will be the MCServer
 function start(path, jar, ram){
     MC_Proc = proc.spawn(
-        "java",[
+        "java", [
             '-Xms'+ram+'M',
             '-Xmx'+ram+'M',
             '-jar',
             jar,
             'nogui'
         ],
-        { cwd: process.cwd() + path});
-        process.on('message',function(m){
-       console.log('child fot message:',m);
-        if(m==='stop')stop();
+        {
+            cwd: process.cwd() + path
+        }
+    );
+    process.on('message', function(m){
+        console.log('Child got message:', m);
+        if(m === 'stop') stop();
+    });
+    process.send({
+        id: MyID,
+        status: 'starting'
     });
     readline.createInterface({
         input: MC_Proc.stdout
     }).on('line', function(line){
         if(line.indexOf('Done (') > 0){
-            console.log("hey It's running. we should probably tell someone");
-           // stop();
-            process.send('started'+ MyID);
+            process.send({
+                id: MyID,
+                status: 'running',
+                players: players
+            });
+        }else if(line.indexOf('joined the game')>0){
+            var p = line.split(' ')[3];
+            players.push(p);
+            console.log('Added Player: ' + p);
+            process.send({
+                id: MyID,
+                status: 'running',
+                players: players
+            });
+        }else if(line.indexOf('left the game')>0){
+            var p = line.split(' ')[3];
+            console.log('Removing Player: ' + p);
+            _.remove(players, p);
+            process.send({
+                id: MyID,
+                status: 'running',
+                players: players
+            });
         }
     });
 }
 
-//start a readline on this process that will read output
-
-//emit 'done' when done is posted to output.
-
-//MCEmitter.on("done", function (){
-//    console.log("server is ready");
-// });
-// need to figure out how to contact the parent and kick off a function there
-//MCEmitter.emit("done");
-
 start(process.argv[2], process.argv[3], process.argv[4]);
-process.stdin.on('data', function(data){
-   if(data.toString() == "stop"){
-       console.log("stop was called");
-       stop();
-   }
-});
 //test line
 //start("/gameServers/survival1.7.10/","forge-1.7.10-10.13.2.1291-universal.jar",512);
