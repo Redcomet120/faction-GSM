@@ -13,15 +13,34 @@ var Server = React.createClass({
     },
 
     render: function(){
+        var getButton = function(status) {
+            var callbacks = {
+                starting:
+                    <button className="btn btn-warning" disabled>
+                        Starting
+                    </button>,
+                running:
+                    <button className="btn btn-danger" onClick={this.stopServer}>
+                        Stop
+                    </button>,
+                stopping:
+                    <button className="btn btn-warning" disabled>
+                        Stopping
+                    </button>,
+                stopped:
+                    <button className="btn btn-success" onClick={this.startServer}>
+                        Start
+                    </button>,
+            };
+            return callbacks[status];
+        }.bind(this);
         return(
             <div className='listItem'>
                 <div className="listTitle">{this.props.name}</div>
                 <div className="listIP"><i className="fa fa-wifi"/>IP HERE</div>
                 <div className="listStatus">{this.props.status}</div>
                 <div className="listButton">
-                    <button className="btn btn-success" onClick={this.startServer}>
-                        Start
-                    </button>
+                    { getButton(this.props.status) }
                 </div>
             </div>
         );

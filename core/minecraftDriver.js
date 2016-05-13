@@ -6,8 +6,16 @@ var players = [];
 var MyID = process.argv[5];
 
 function stop(){
+    process.send({
+        id: MyID,
+        status: 'stopping'
+    });
     MC_Proc.stdin.write('/stop\n');
     MC_Proc.on('close', function(code){
+        process.send({
+            id: MyID,
+            status: 'stopped'
+        });
         console.log('Exiting child process with code:', code);
     });
 }

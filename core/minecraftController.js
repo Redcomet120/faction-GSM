@@ -2,18 +2,17 @@ var _ = require('lodash');
 var exec = require('child_process');
 var mysqlDriver = require('./mysql-driver');
 
-var mcServers = [];
+var mcServers = {};
 var actions = {
 
     //scrap most of this. do a dtatbase lookup and spawn a new processr
     start: function(id, io){
-        io.emit("start", id);
         if(mcServers[id]){
             console.log("Server is already running");
             return;
         }
         //take the ID and get the Database info
-        mysqlDriver.findServerByID(id,function(err, result){
+        mysqlDriver.findServerByID(id, function(err, result){
             if(err || _.isEmpty(result)) {
                 console.log("Failed to obtain server with ID:", id);
                 return;
@@ -30,11 +29,15 @@ var actions = {
             ]);
 
             mcServers[id].on('message', function(m){
+                io.emit(m.status, m);
                 console.log('We got message:', m);
+                if(m.status === 'stopped') {
+                    delete mcServers[id];
+                }
             });
         });
     },
-    stop: function(id, io){
+    stop: function(id){
         if(!_.isEmpty(mcServers[id])) {
             mcServers[id].send('stop');
         } else {
