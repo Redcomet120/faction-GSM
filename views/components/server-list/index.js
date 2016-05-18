@@ -38,7 +38,7 @@ var Server = React.createClass({
             <div className='listItem'>
                 <div className="listTitle">{this.props.name}</div>
                 <div className="listIP"><i className="fa fa-wifi"/>IP HERE</div>
-                <div className="listStatus">{this.props.status}</div>
+                <div className="listPlayers">{this.props.status}</div>
                 <div className="listButton">
                     { getButton(this.props.status) }
                 </div>
@@ -62,7 +62,7 @@ var ServerList = React.createClass({
                     <div className="listHeader">
                         <div className="listTitle">Server Name</div>
                         <div className="listIP">IP address</div>
-                        <div className="listStatus">Status</div>
+                        <div className="listPlayers">Players</div>
                         <div className="listButton">
                             <button className="btn btn-info">
                                 <i className="fa fa-plus-square"/>

@@ -3,7 +3,8 @@ var exec = require('child_process');
 var mysqlDriver = require('./mysql-driver');
 
 var mcServers = {};
-var actions = {
+var mcServerStatus = {};
+var actions = {};
 
     //scrap most of this. do a dtatbase lookup and spawn a new processr
     start: function(id, io){
@@ -17,9 +18,10 @@ var actions = {
                 console.log("Failed to obtain server with ID:", id);
                 return;
             }
-
             var serverData = JSON.parse(_.first(result).serverData);
 
+            // set the status
+            mcServerStatus[id] = 'starting';
             // start the child node process
             mcServers[id] = exec.fork('core/minecraftDriver.js',[
                 '/gameServers/' + serverData.serverDir + '/',
@@ -33,12 +35,18 @@ var actions = {
                 console.log('We got message:', m);
                 if(m.status === 'stopped') {
                     delete mcServers[id];
+                    delete mcServerStatus[id];
+                }else if(m.status === 'running') {
+                    mcServerStatus[id] = 'running';
+                }else if(m.status === 'stopping') {
+                    mcServerStatus[id] = 'stopping';
                 }
             });
         });
     },
     stop: function(id){
         if(!_.isEmpty(mcServers[id])) {
+            mcServerStatus[id] = 'stopping'
             mcServers[id].send('stop');
         } else {
             console.log('Server ' + id + ' is not currently running.');
@@ -46,7 +54,6 @@ var actions = {
     }
 };
 
-// somewhere we need to kickoff a socket to listen to our child processes
 
 module.exports = {
     action: function(req, res, io){
