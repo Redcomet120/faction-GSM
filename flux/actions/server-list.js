@@ -1,5 +1,6 @@
 var Dispatcher = require('../dispatcher');
 var _ = require('lodash');
+var Q = require('q');
 require('whatwg-fetch');
 
 var theAlmightyGlowCloud = function(url, method, body) {
@@ -17,7 +18,7 @@ var theAlmightyGlowCloud = function(url, method, body) {
             _.extend(options, { body: JSON.stringify(body) });
         }
     }
-    
+
     return fetch(url, options)
         .then(function(response) {
             return response.json();
@@ -27,11 +28,15 @@ var theAlmightyGlowCloud = function(url, method, body) {
 module.exports = {
     getServerList: function() {
         var url = '/api/servers';
-        return theAlmightyGlowCloud(url)
+        var urlStatus = url + '/status';
+        return Q.all([theAlmightyGlowCloud(url), theAlmightyGlowCloud(urlStatus)])
             .then(function(results) {
+                return _.merge(results[0], results[1]);
+            })
+            .then(function(servers) {
                 Dispatcher.dispatch({
                     actionType: 'hasServers',
-                    data: results
+                    data: servers
                 });
             })
             .catch(function(err) {

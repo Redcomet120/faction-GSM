@@ -4,9 +4,8 @@ var mysqlDriver = require('./mysql-driver');
 
 var mcServers = {};
 var mcServerStatus = {};
-var actions = {};
+var actions = {
 
-    //scrap most of this. do a dtatbase lookup and spawn a new processr
     start: function(id, io){
         if(mcServers[id]){
             console.log("Server is already running");
@@ -20,8 +19,6 @@ var actions = {};
             }
             var serverData = JSON.parse(_.first(result).serverData);
 
-            // set the status
-            mcServerStatus[id] = 'starting';
             // start the child node process
             mcServers[id] = exec.fork('core/minecraftDriver.js',[
                 '/gameServers/' + serverData.serverDir + '/',
@@ -32,21 +29,18 @@ var actions = {};
 
             mcServers[id].on('message', function(m){
                 io.emit(m.status, m);
+                // set the status
+                mcServerStatus[id] = m;
                 console.log('We got message:', m);
                 if(m.status === 'stopped') {
                     delete mcServers[id];
                     delete mcServerStatus[id];
-                }else if(m.status === 'running') {
-                    mcServerStatus[id] = 'running';
-                }else if(m.status === 'stopping') {
-                    mcServerStatus[id] = 'stopping';
                 }
             });
         });
     },
     stop: function(id){
         if(!_.isEmpty(mcServers[id])) {
-            mcServerStatus[id] = 'stopping'
             mcServers[id].send('stop');
         } else {
             console.log('Server ' + id + ' is not currently running.');
@@ -60,11 +54,9 @@ module.exports = {
         var id = req.params.id;
         var action = req.query.action;
         actions[action](id, io);
-            //.then(function(results){
-                res.status(200).send();//results);
-            //})
-            //.catch(function(reason){
-                //res.status(502).send(reason);
-            //});
+        res.status(200).send();
+    },
+    getStatus: function(req, res) {
+        res.status(200).send(mcServerStatus);
     }
 };

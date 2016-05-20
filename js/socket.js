@@ -55,4 +55,11 @@ socket.on('stopped', function(data){
             status: 'stopped'
         }
     });
+    Dispatcher.dispatch({
+        actionType: 'updatePlayers',
+        data: {
+            id: data.id,
+            players: []
+        }
+    });
 });

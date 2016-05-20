@@ -65,7 +65,7 @@ var Login = React.createClass({
                     <div className="loginForm">
                         <div className="btn-group">
                             <button className="btn btn-info" onClick={this.login}>Login</button>
-                            <button  className="btn btn-info">Register</button>
+                            <button className="btn btn-info">Register</button>
                        </div>
                         <div className="form-group">
                             <label form="username"><i className="fa fa-user"/>

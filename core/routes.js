@@ -65,6 +65,8 @@ module.exports = function(app, passport, io) {
 
     // API for getting the list of servers
     app.get('/api/servers', ServerController.getAll);
+    // API for getting the servers' statuses
+    app.get('/api/servers/status', MCController.getStatus);
     // API for game server actions
     app.get('/api/servers/:id', function(req, res){
         MCController.action(req, res, io);

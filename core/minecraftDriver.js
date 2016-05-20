@@ -64,7 +64,7 @@ function start(path, jar, ram){
         }else if(line.indexOf('left the game')>0){
             p = line.split(' ')[3];
             console.log('Removing Player: ' + p);
-            _.remove(players, p);
+            _.pull(players, p);
             process.send({
                 id: MyID,
                 status: 'running',

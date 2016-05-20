@@ -34,13 +34,16 @@ var Server = React.createClass({
             };
             return callbacks[status];
         }.bind(this);
+        var status = this.props.status || 'stopped';
+        var players = this.props.players || [];
+
         return(
             <div className='listItem'>
                 <div className="listTitle">{this.props.name}</div>
                 <div className="listIP"><i className="fa fa-wifi"/>IP HERE</div>
-                <div className="listPlayers">{this.props.status}</div>
+                <div className="listPlayers">{players}</div>
                 <div className="listButton">
-                    { getButton(this.props.status) }
+                    { getButton(status) }
                 </div>
             </div>
         );
